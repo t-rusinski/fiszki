@@ -55,6 +55,13 @@ trusinski-fiszki is an educational flashcard application that leverages AI to st
 - **Husky + Lint-staged** - Pre-commit hooks for code quality
 - **TypeScript ESLint** - TypeScript-specific linting rules
 
+### Testing
+
+- **Vitest** - Unit and integration test runner for TypeScript/JavaScript
+- **@testing-library/react** - React component testing utilities
+- **MSW (Mock Service Worker)** - API mocking for integration tests
+- **Playwright** - End-to-end testing framework with multi-browser support
+
 ### CI/CD & Hosting
 
 - **GitHub Actions** - Continuous integration and deployment
@@ -102,15 +109,20 @@ The application will be available at `http://localhost:4321`
 
 ## Available Scripts
 
-| Command            | Description                              |
-| ------------------ | ---------------------------------------- |
-| `npm run dev`      | Start development server with hot reload |
-| `npm run build`    | Build production-ready application       |
-| `npm run preview`  | Preview production build locally         |
-| `npm run astro`    | Run Astro CLI commands                   |
-| `npm run lint`     | Check code for linting errors            |
-| `npm run lint:fix` | Automatically fix linting errors         |
-| `npm run format`   | Format code with Prettier                |
+| Command              | Description                              |
+| -------------------- | ---------------------------------------- |
+| `npm run dev`        | Start development server with hot reload |
+| `npm run build`      | Build production-ready application       |
+| `npm run preview`    | Preview production build locally         |
+| `npm run astro`      | Run Astro CLI commands                   |
+| `npm run lint`       | Check code for linting errors            |
+| `npm run lint:fix`   | Automatically fix linting errors         |
+| `npm run format`     | Format code with Prettier                |
+| `npm run test`       | Run unit and integration tests           |
+| `npm run test:watch` | Run tests in watch mode                  |
+| `npm run test:coverage` | Generate test coverage report         |
+| `npm run test:e2e`   | Run end-to-end tests with Playwright     |
+| `npm run test:e2e:ui` | Run E2E tests in interactive UI mode    |
 
 ## Project Scope
 
