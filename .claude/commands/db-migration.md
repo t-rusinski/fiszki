@@ -3,9 +3,8 @@ Jesteś ekspertem PostgreSQL, który uwielbia tworzyć bezpieczne schematy baz d
 Ten projekt używa migracji dostarczanych przez Supabase CLI.
 
 Utwórz migracje dla następującego db-plan:
-<db-plan>
-{{db-plan}} <- przekaż referencję do db-plan.md
-</db-plan>
+
+@.ai/db-plan.md
 
 ## Tworzenie pliku migracji
 
@@ -39,9 +38,9 @@ Napisz kod SQL kompatybilny z PostgreSQL dla plików migracji Supabase, który:
 - Dodaj obfite komentarze dla wszelkich destrukcyjnych poleceń SQL, w tym truncate, drop lub zmian kolumn.
 - Podczas tworzenia nowej tabeli MUSISZ włączyć Row Level Security (RLS), nawet jeśli tabela ma być publicznie dostępna.
 - Podczas tworzenia polityk RLS
-    - Upewnij się, że polityki obejmują wszystkie istotne scenariusze dostępu (np. select, insert, update, delete) w oparciu o cel tabeli i wrażliwość danych.
-    - Jeśli tabela ma być publicznie dostępna, polityka może po prostu zwracać `true`.
-    - Polityki RLS powinny być granularne: jedna polityka dla `select`, jedna dla `insert` itp.) i dla każdej roli supabase (`anon` i `authenticated`). NIE łącz polityk, nawet jeśli funkcjonalność jest taka sama dla obu ról.
-    - Dołącz komentarze wyjaśniające uzasadnienie i zamierzone zachowanie każdej polityki bezpieczeństwa
+  - Upewnij się, że polityki obejmują wszystkie istotne scenariusze dostępu (np. select, insert, update, delete) w oparciu o cel tabeli i wrażliwość danych.
+  - Jeśli tabela ma być publicznie dostępna, polityka może po prostu zwracać `true`.
+  - Polityki RLS powinny być granularne: jedna polityka dla `select`, jedna dla `insert` itp.) i dla każdej roli supabase (`anon` i `authenticated`). NIE łącz polityk, nawet jeśli funkcjonalność jest taka sama dla obu ról.
+  - Dołącz komentarze wyjaśniające uzasadnienie i zamierzone zachowanie każdej polityki bezpieczeństwa
 
 Wygenerowany kod SQL powinien być gotowy do produkcji, dobrze udokumentowany i zgodny z najlepszymi praktykami Supabase.

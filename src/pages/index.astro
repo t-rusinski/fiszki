@@ -1,8 +1,25 @@
 ---
-import Welcome from "../components/Welcome.astro";
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout>
-  <Welcome />
+<Layout title="Fiszki - 10x-cards">
+  <main class="min-h-screen bg-background flex items-center justify-center">
+    <div class="text-center space-y-6">
+      <h1 class="text-4xl font-bold">Witaj w aplikacji Fiszki</h1>
+      <div class="flex gap-4 justify-center">
+        <a
+          href="/generate"
+          class="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+        >
+          Generuj fiszki
+        </a>
+        <a
+          href="/flashcards"
+          class="px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/90 transition-colors"
+        >
+          Moje fiszki
+        </a>
+      </div>
+    </div>
+  </main>
 </Layout>

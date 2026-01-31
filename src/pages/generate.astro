@@ -1,0 +1,16 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { GenerationView } from "../components/generation/GenerationView";
+
+const { user } = Astro.locals;
+
+if (!user) {
+  return Astro.redirect("/auth/login");
+}
+---
+
+<Layout title="Generuj fiszki - 10x-cards">
+  <main class="min-h-screen bg-background">
+    <GenerationView client:load />
+  </main>
+</Layout>

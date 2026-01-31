@@ -1,0 +1,43 @@
+---
+import Layout from "../layouts/Layout.astro";
+import UsersList from "../components/users/UsersList.tsx";
+---
+
+<Layout title="Lista Użytkowników - 10xDevs">
+  <div
+    class="relative w-full mx-auto min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 p-4 sm:p-8"
+  >
+    <div
+      class="relative max-w-7xl mx-auto backdrop-blur-xl bg-gradient-to-b from-white/10 to-white/5 rounded-2xl shadow-2xl p-8 text-white border border-white/10"
+    >
+      <div class="space-y-8">
+        <!-- Header -->
+        <div class="text-center">
+          <h1
+            class="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 text-transparent bg-clip-text drop-shadow-lg"
+          >
+            Lista Użytkowników
+          </h1>
+          <p class="text-xl text-blue-100/90 drop-shadow-md">Przeglądaj wszystkich użytkowników systemu</p>
+        </div>
+
+        <!-- Users List Component -->
+        <UsersList client:load />
+
+        <!-- Back Link -->
+        <div class="text-center mt-8">
+          <a
+            href="/"
+            class="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-lg rounded-lg border border-white/10 hover:border-white/30 transition-all duration-300 text-blue-100 hover:text-white"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              ></path>
+            </svg>
+            <span>Powrót do strony głównej</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

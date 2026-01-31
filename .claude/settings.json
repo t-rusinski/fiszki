@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./supabase/.env)",
+      "Read(./**/secrets/**)",
+      "Read(./**/*.key)",
+      "Read(./**/*.pem)",
+      "Read(./**/credentials.json)",
+      "Edit(./.env)",
+      "Edit(./.env.*)",
+      "Edit(./supabase/.env)"
+    ],
+    "allow": [
+      "Bash(npm:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git branch:*)",
+      "Bash(astro:*)",
+      "Edit(./**/*.ts)",
+      "Edit(./**/*.tsx)",
+      "Edit(./**/*.js)",
+      "Edit(./**/*.jsx)",
+      "Edit(./**/*.astro)",
+      "Edit(./**/*.json)",
+      "Edit(./**/*.md)",
+      "Edit(./**/*.css)",
+      "Edit(./**/*.html)",
+      "Edit(./**/*.yml)",
+      "Edit(./**/*.yaml)",
+      "Edit(./**/*.mjs)",
+      "Edit(./**/*.cjs)",
+      "Write(./**/*.ts)",
+      "Write(./**/*.tsx)",
+      "Write(./**/*.js)",
+      "Write(./**/*.jsx)",
+      "Write(./**/*.astro)",
+      "Write(./**/*.json)",
+      "Write(./**/*.md)",
+      "Write(./**/*.css)",
+      "Write(./**/*.html)",
+      "Write(./**/*.yml)",
+      "Write(./**/*.yaml)",
+      "Write(./**/*.mjs)",
+      "Write(./**/*.cjs)"
+    ],
+    "ask": [
+      "WebFetch",
+      "WebSearch",
+      "Task"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit(./**/*.{ts,tsx,js,jsx,astro,mjs,cjs})",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "npm run lint:fix && npm run format",
+            "statusMessage": "Uruchamianie lint i format...",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

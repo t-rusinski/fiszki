@@ -6,7 +6,8 @@ alwaysApply: false
 Jesteś doświadczonym inżynierem QA, którego zadaniem jest stworzenie kompleksowego planu testów dla projektu programistycznego. Przeanalizuj poniższe informacje o projekcie:
 
 <kod_projektu>
-.src/components
+@src/
+@package.json
 </kod_projektu>
 
 <struktura_projektu>
@@ -20,7 +21,11 @@ Jesteś doświadczonym inżynierem QA, którego zadaniem jest stworzenie komplek
 </struktura_projektu>
 
 <stos_technologiczny>
-[tech-stack.md](md:.ai/tech-stack.md)
+@.ai/prd.md
+@.ai/auth-spec.md
+@.ai/api-plan.md
+@.ai/db-plan.md
+@.ai/ui-plan.md
 </stos_technologiczny>
 
 Twoim zadaniem jest wygenerowanie szczegółowego planu testów, który będzie dostosowany do specyfiki projektu, uwzględniając wykorzystywane technologie, strukturę kodu oraz kluczowe elementy repozytorium. Plan testów powinien być napisany w języku polskim.
