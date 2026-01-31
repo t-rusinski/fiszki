@@ -56,13 +56,13 @@ describe("GenerateFlashcardsSchema", () => {
   });
 
   describe("model validation", () => {
-    it("sets default model to 'mistralai/mistral-7b-instruct:free'", () => {
+    it("sets default model to 'arcee-ai/trinity-large-preview:free'", () => {
       const result = GenerateFlashcardsSchema.safeParse({
         source_text: "a".repeat(1000),
       });
       expect(result.success).toBe(true);
       if (result.success) {
-        expect(result.data.model).toBe("mistralai/mistral-7b-instruct:free");
+        expect(result.data.model).toBe("arcee-ai/trinity-large-preview:free");
       }
     });
 
