@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { ZodError } from "zod";
 import { FlashcardSource } from "@/types";
 import {
   CreateFlashcardSchema,
@@ -201,9 +200,7 @@ describe("CreateFlashcardSchema", () => {
       });
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.errors[0].message).toBe(
-          "generation_id is required when source is ai-full or ai-edited"
-        );
+        expect(result.error.errors[0].message).toBe("generation_id is required when source is ai-full or ai-edited");
         expect(result.error.errors[0].path).toContain("generation_id");
       }
     });
@@ -216,9 +213,7 @@ describe("CreateFlashcardSchema", () => {
       });
       expect(result.success).toBe(false);
       if (!result.success) {
-        expect(result.error.errors[0].message).toBe(
-          "generation_id is required when source is ai-full or ai-edited"
-        );
+        expect(result.error.errors[0].message).toBe("generation_id is required when source is ai-full or ai-edited");
         expect(result.error.errors[0].path).toContain("generation_id");
       }
     });

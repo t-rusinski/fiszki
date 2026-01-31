@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
-import { renderWithProviders, screen, fireEvent } from '@/test/test-utils';
+import { describe, it, expect, vi } from "vitest";
+import { renderWithProviders, screen, fireEvent } from "@/test/test-utils";
 
 // Example React component for demonstration
 function Button({ onClick, children }: { onClick: () => void; children: React.ReactNode }) {
@@ -10,8 +10,8 @@ function Button({ onClick, children }: { onClick: () => void; children: React.Re
   );
 }
 
-describe('Button Component', () => {
-  it('should render button with text', () => {
+describe("Button Component", () => {
+  it("should render button with text", () => {
     // Arrange
     const handleClick = vi.fn();
 
@@ -19,27 +19,27 @@ describe('Button Component', () => {
     renderWithProviders(<Button onClick={handleClick}>Click me</Button>);
 
     // Assert
-    expect(screen.getByRole('button', { name: /click me/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /click me/i })).toBeInTheDocument();
   });
 
-  it('should call onClick when clicked', () => {
+  it("should call onClick when clicked", () => {
     // Arrange
     const handleClick = vi.fn();
     renderWithProviders(<Button onClick={handleClick}>Click me</Button>);
 
     // Act
-    const button = screen.getByRole('button', { name: /click me/i });
+    const button = screen.getByRole("button", { name: /click me/i });
     fireEvent.click(button);
 
     // Assert
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it('should handle multiple clicks', () => {
+  it("should handle multiple clicks", () => {
     // Arrange
     const handleClick = vi.fn();
     renderWithProviders(<Button onClick={handleClick}>Click me</Button>);
-    const button = screen.getByRole('button', { name: /click me/i });
+    const button = screen.getByRole("button", { name: /click me/i });
 
     // Act
     fireEvent.click(button);

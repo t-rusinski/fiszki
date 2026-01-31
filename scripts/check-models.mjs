@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+/* eslint-env node */
+/* eslint-disable no-console */
 
 /**
  * Script do sprawdzania dostępności modeli OpenRouter
@@ -7,7 +9,7 @@
  *   node scripts/check-models.mjs
  */
 
-import { config } from 'dotenv';
+import { config } from "dotenv";
 
 // Load .env file
 config();
@@ -15,13 +17,7 @@ config();
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
 const MODELS_TO_CHECK = [
-  "mistralai/mistral-7b-instruct:free",
-  "google/gemini-flash-1.5:free",
-  "meta-llama/llama-3.1-8b-instruct:free",
-  "meta-llama/llama-3.2-3b-instruct:free",
-  "qwen/qwen-2-7b-instruct:free",
-  "microsoft/phi-3-mini-128k-instruct:free",
-  "openai/gpt-oss-20b:free",
+  "arcee-ai/trinity-large-preview:free",
 ];
 
 async function fetchAvailableModels() {

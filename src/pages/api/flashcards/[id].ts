@@ -3,7 +3,6 @@ import type { DeleteFlashcardResponseDTO } from "@/types";
 import { FlashcardService } from "@/services/flashcard.service";
 import { FlashcardIdSchema, UpdateFlashcardSchema } from "@/lib/validation/flashcard.schemas";
 import { handleError } from "@/lib/error-handler";
-import { DEFAULT_USR_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 

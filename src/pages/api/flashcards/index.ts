@@ -6,7 +6,6 @@ import {
   CreateMultipleFlashcardsSchema,
 } from "@/lib/validation/flashcard.schemas";
 import { handleError } from "@/lib/error-handler";
-import { DEFAULT_USR_ID } from "@/db/supabase.client";
 
 export const prerender = false;
 

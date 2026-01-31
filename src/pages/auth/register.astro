@@ -9,7 +9,7 @@ const { user } = Astro.locals;
 
 // If user is already logged in, redirect to home
 if (user) {
-  return Astro.redirect('/');
+  return Astro.redirect("/");
 }
 ---
 
@@ -59,9 +59,7 @@ if (user) {
             />
           </div>
           <div id="error-message" class="hidden text-sm text-red-500"></div>
-          <Button type="submit" className="w-full">
-            Create Account
-          </Button>
+          <Button type="submit" className="w-full"> Create Account </Button>
         </form>
       </CardContent>
       <CardFooter className="flex justify-center">
@@ -74,29 +72,29 @@ if (user) {
 </Layout>
 
 <script>
-  const form = document.getElementById('register-form') as HTMLFormElement;
-  const errorMessage = document.getElementById('error-message') as HTMLDivElement;
+  const form = document.getElementById("register-form") as HTMLFormElement;
+  const errorMessage = document.getElementById("error-message") as HTMLDivElement;
 
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    errorMessage.classList.add('hidden');
+    errorMessage.classList.add("hidden");
 
     const formData = new FormData(form);
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-    const confirmPassword = formData.get('confirm-password') as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirm-password") as string;
 
     if (password !== confirmPassword) {
-      errorMessage.textContent = 'Passwords do not match';
-      errorMessage.classList.remove('hidden');
+      errorMessage.textContent = "Passwords do not match";
+      errorMessage.classList.remove("hidden");
       return;
     }
 
     try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
@@ -104,16 +102,16 @@ if (user) {
       const data = await response.json();
 
       if (!response.ok) {
-        errorMessage.textContent = data.error || 'Failed to create account';
-        errorMessage.classList.remove('hidden');
+        errorMessage.textContent = data.error || "Failed to create account";
+        errorMessage.classList.remove("hidden");
         return;
       }
 
       // Redirect to home page on success
-      window.location.href = '/';
-    } catch (error) {
-      errorMessage.textContent = 'An unexpected error occurred';
-      errorMessage.classList.remove('hidden');
+      window.location.href = "/";
+    } catch {
+      errorMessage.textContent = "An unexpected error occurred";
+      errorMessage.classList.remove("hidden");
     }
   });
 </script>

@@ -5,15 +5,9 @@ import { cn } from "@/lib/utils";
 const MIN_LENGTH = 1000;
 const MAX_LENGTH = 10000;
 
-// Darmowe modele (Free tier) - uporządkowane według stabilności
+// Darmowe modele (Free tier)
 const FREE_MODELS = [
-  { value: "mistralai/mistral-7b-instruct:free", label: "Mistral 7B ✅ DZIAŁA" },
-  { value: "meta-llama/llama-3.1-8b-instruct:free", label: "Llama 3.1 8B" },
-  { value: "meta-llama/llama-3.2-3b-instruct:free", label: "Llama 3.2 3B" },
-  { value: "qwen/qwen-2-7b-instruct:free", label: "Qwen 2 7B" },
-  { value: "microsoft/phi-3-mini-128k-instruct:free", label: "Phi-3 Mini" },
-  { value: "google/gemini-flash-1.5:free", label: "Gemini Flash ⚠️ Często niedostępny" },
-  { value: "openai/gpt-oss-20b:free", label: "GPT-OSS 20B ⚠️ Niestabilny" },
+  { value: "arcee-ai/trinity-large-preview:free", label: "Arcee Trinity Large ✅ DOMYŚLNY" },
 ] as const;
 
 // Płatne modele (Paid tier)
@@ -33,7 +27,7 @@ interface GenerationFormProps {
 
 export function GenerationForm({ onGenerate, isGenerating }: GenerationFormProps) {
   const [sourceText, setSourceText] = useState("");
-  const [selectedModel, setSelectedModel] = useState(FREE_MODELS[0].value);
+  const [selectedModel, setSelectedModel] = useState<string>(FREE_MODELS[0].value);
   const [error, setError] = useState<string | null>(null);
 
   const currentLength = sourceText.length;
@@ -98,6 +92,7 @@ export function GenerationForm({ onGenerate, isGenerating }: GenerationFormProps
         </label>
         <select
           id="model-select"
+          data-testid="model-select"
           value={selectedModel}
           onChange={(e) => setSelectedModel(e.target.value)}
           disabled={isGenerating}
@@ -124,7 +119,7 @@ export function GenerationForm({ onGenerate, isGenerating }: GenerationFormProps
           </optgroup>
         </select>
         <p className="text-xs text-muted-foreground">
-          💡 Rekomendacja: <strong>Mistral 7B</strong> - sprawdzony i stabilny. Unikaj modeli oznaczonych ⚠️.
+          💡 Rekomendacja: <strong>Arcee Trinity Large</strong> - domyślny model. Unikaj modeli oznaczonych ⚠️.
         </p>
       </div>
 
@@ -134,6 +129,7 @@ export function GenerationForm({ onGenerate, isGenerating }: GenerationFormProps
         </label>
         <textarea
           id="source-text"
+          data-testid="source-text-input"
           aria-label="Tekst źródłowy do generowania fiszek"
           aria-describedby="char-counter validation-message"
           aria-invalid={error ? "true" : "false"}
@@ -154,6 +150,7 @@ export function GenerationForm({ onGenerate, isGenerating }: GenerationFormProps
         {/* Character Counter */}
         <div
           id="char-counter"
+          data-testid="char-counter"
           className={cn("text-sm font-medium", getCounterColor())}
           aria-live="polite"
           aria-atomic="true"
@@ -165,6 +162,7 @@ export function GenerationForm({ onGenerate, isGenerating }: GenerationFormProps
         {validationMessage && (
           <div
             id="validation-message"
+            data-testid="validation-message"
             className={cn("text-sm", isValid ? "text-green-600 dark:text-green-500" : "text-destructive")}
             aria-live="polite"
           >
@@ -174,17 +172,23 @@ export function GenerationForm({ onGenerate, isGenerating }: GenerationFormProps
 
         {/* Error Message */}
         {error && (
-          <div className="text-sm text-destructive" role="alert" aria-live="assertive">
+          <div data-testid="form-error" className="text-sm text-destructive" role="alert" aria-live="assertive">
             {error}
           </div>
         )}
       </div>
 
       <div className="flex gap-3">
-        <Button type="submit" disabled={isDisabled} className="flex-1">
+        <Button type="submit" disabled={isDisabled} className="flex-1" data-testid="generate-button">
           {isGenerating ? "Generowanie..." : "Generuj fiszki"}
         </Button>
-        <Button type="button" variant="outline" onClick={handleClear} disabled={isGenerating}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleClear}
+          disabled={isGenerating}
+          data-testid="clear-button"
+        >
           Wyczyść
         </Button>
       </div>

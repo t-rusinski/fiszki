@@ -1,7 +1,7 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi } from "vitest";
 
-describe('Example Unit Test', () => {
-  it('should demonstrate basic test structure', () => {
+describe("Example Unit Test", () => {
+  it("should demonstrate basic test structure", () => {
     // Arrange
     const input = 1 + 1;
 
@@ -12,7 +12,7 @@ describe('Example Unit Test', () => {
     expect(result).toBe(2);
   });
 
-  it('should demonstrate mock usage', () => {
+  it("should demonstrate mock usage", () => {
     // Create a mock function
     const mockFn = vi.fn((x: number) => x * 2);
 

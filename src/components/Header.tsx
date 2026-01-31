@@ -41,15 +41,16 @@ export function Header({ user }: HeaderProps) {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      const response = await fetch('/api/auth/logout', {
-        method: 'POST',
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
       });
 
       if (response.ok) {
-        window.location.href = '/auth/login';
+        window.location.href = "/auth/login";
       }
     } catch (error) {
-      console.error('Logout failed:', error);
+      // eslint-disable-next-line no-console
+      console.error("Logout failed:", error);
     } finally {
       setIsLoggingOut(false);
     }
@@ -105,13 +106,7 @@ export function Header({ user }: HeaderProps) {
                 <User className="h-4 w-4" />
                 <span>{user.email}</span>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleLogout}
-                disabled={isLoggingOut}
-                aria-label="Wyloguj"
-              >
+              <Button variant="ghost" size="icon" onClick={handleLogout} disabled={isLoggingOut} aria-label="Wyloguj">
                 <LogOut className="h-5 w-5" />
               </Button>
             </>

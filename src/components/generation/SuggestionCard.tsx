@@ -69,9 +69,12 @@ export function SuggestionCard({ suggestion, isChecked, onCheck, onEdit, onRejec
   );
 
   return (
-    <Card className={cn("p-4 transition-all", isChecked && "ring-2 ring-primary bg-primary/5")}>
+    <Card
+      className={cn("p-4 transition-all", isChecked && "ring-2 ring-primary bg-primary/5")}
+      data-testid="suggestion-card"
+    >
       {isEditing ? (
-        <div className="space-y-4" onKeyDown={handleKeyDown}>
+        <div className="space-y-4" onKeyDown={handleKeyDown} data-testid="edit-mode">
           {/* Front Edit */}
           <div className="space-y-1">
             <label htmlFor="edit-front" className="text-sm font-medium">
@@ -79,6 +82,7 @@ export function SuggestionCard({ suggestion, isChecked, onCheck, onEdit, onRejec
             </label>
             <textarea
               id="edit-front"
+              data-testid="edit-front-input"
               value={editFront}
               onChange={(e) => setEditFront(e.target.value)}
               maxLength={MAX_FRONT_LENGTH}
@@ -116,6 +120,7 @@ export function SuggestionCard({ suggestion, isChecked, onCheck, onEdit, onRejec
             </label>
             <textarea
               id="edit-back"
+              data-testid="edit-back-input"
               value={editBack}
               onChange={(e) => setEditBack(e.target.value)}
               maxLength={MAX_BACK_LENGTH}
@@ -147,20 +152,27 @@ export function SuggestionCard({ suggestion, isChecked, onCheck, onEdit, onRejec
 
           {/* Edit Actions */}
           <div className="flex gap-2 justify-end">
-            <Button type="button" variant="outline" size="sm" onClick={handleCancelEdit}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleCancelEdit}
+              data-testid="cancel-edit-button"
+            >
               Anuluj
             </Button>
-            <Button type="button" size="sm" onClick={handleSaveEdit}>
+            <Button type="button" size="sm" onClick={handleSaveEdit} data-testid="save-edit-button">
               Zapisz
             </Button>
           </div>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-3" data-testid="view-mode">
           {/* Checkbox */}
           <div className="flex items-start gap-3">
             <input
               type="checkbox"
+              data-testid="flashcard-checkbox"
               checked={isChecked}
               onChange={(e) => onCheck(e.target.checked)}
               className="mt-1 size-4 rounded border-gray-300 text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer"
@@ -169,14 +181,21 @@ export function SuggestionCard({ suggestion, isChecked, onCheck, onEdit, onRejec
 
             <div className="flex-1 space-y-2 min-w-0">
               {/* Front Text */}
-              <div className="font-bold text-sm break-words">{suggestion.front}</div>
+              <div className="font-bold text-sm break-words" data-testid="flashcard-front">
+                {suggestion.front}
+              </div>
 
               {/* Back Text */}
-              <div className="text-sm break-words text-muted-foreground">{suggestion.back}</div>
+              <div className="text-sm break-words text-muted-foreground" data-testid="flashcard-back">
+                {suggestion.back}
+              </div>
 
               {/* Edited Badge */}
               {suggestion.source === "ai-edited" && (
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                <span
+                  data-testid="edited-badge"
+                  className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                >
                   Edytowane
                 </span>
               )}
@@ -191,11 +210,19 @@ export function SuggestionCard({ suggestion, isChecked, onCheck, onEdit, onRejec
               size="sm"
               onClick={() => setIsEditing(true)}
               aria-label="Edytuj fiszkę"
+              data-testid="edit-flashcard-button"
             >
               <Pencil className="size-4" />
               Edytuj
             </Button>
-            <Button type="button" variant="destructive" size="sm" onClick={onReject} aria-label="Odrzuć fiszkę">
+            <Button
+              type="button"
+              variant="destructive"
+              size="sm"
+              onClick={onReject}
+              aria-label="Odrzuć fiszkę"
+              data-testid="reject-flashcard-button"
+            >
               <X className="size-4" />
               Odrzuć
             </Button>

@@ -3,7 +3,7 @@ import type { User } from "../../types";
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ locals }) => {
+export const GET: APIRoute = async () => {
   try {
     // TODO: Integrate with Supabase through Astro.locals.supabase
     // const { data, error } = await locals.supabase

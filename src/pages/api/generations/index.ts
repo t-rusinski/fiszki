@@ -2,7 +2,6 @@ import type { APIRoute } from "astro";
 import { GenerationService } from "../../../services/generation.service";
 import { GetGenerationsSchema } from "../../../lib/validation/generation.schemas";
 import { handleApiError } from "../../../lib/error-handler";
-import { DEFAULT_USR_ID } from "../../../db/supabase.client";
 
 export const prerender = false;
 

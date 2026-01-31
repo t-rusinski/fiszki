@@ -1,4 +1,4 @@
-Przejdz przez kluczowe komponent powiazane z tym scenariuszem dodajac atrybyty data-test-it o wartosciach dopasowanych do znaczenia danego elementu lub akcji
+Przejdz przez kluczowe komponent powiazane z tym scenariuszem dodajac atrybyty data-test-id o wartosciach dopasowanych do znaczenia danego elementu lub akcji
 
 Scenariusze testowe E2E dla GenerationView
 1. Happy Path - Pełny flow generowania i zapisywania fiszek

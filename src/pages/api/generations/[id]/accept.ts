@@ -2,7 +2,6 @@ import type { APIRoute } from "astro";
 import { GenerationService } from "../../../../services/generation.service";
 import { AcceptGeneratedFlashcardsSchema } from "../../../../lib/validation/generation.schemas.ts";
 import { handleApiError } from "../../../../lib/error-handler";
-import { DEFAULT_USR_ID } from "../../../../db/supabase.client";
 
 export const prerender = false;
 

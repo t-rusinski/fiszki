@@ -64,6 +64,7 @@ export function GenerationView() {
       setSuggestions(data.flashcardSuggestions);
       setViewState("reviewing");
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error("Generation error:", err);
       setError(err instanceof Error ? err.message : "Nieznany błąd podczas generowania");
       setViewState("idle");
@@ -103,7 +104,7 @@ export function GenerationView() {
         const count = data.accepted_count;
 
         setSuccessMessage(
-          `${count} ${count === 1 ? "fiszka została zapisana" : "fiszek zostało zapisanych"} pomyślnie!`
+          `${count} ${count === 1 ? "fiszka została zapisana" : count >= 2 && count <= 4 ? "fiszki zostały zapisane" : "fiszek zostało zapisanych"} pomyślnie!`
         );
 
         // Reset state
@@ -111,6 +112,7 @@ export function GenerationView() {
         setSuggestions([]);
         setViewState("idle");
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error("Accept error:", err);
         setError(err instanceof Error ? err.message : "Nieznany błąd podczas zapisywania");
         setViewState("reviewing");
@@ -132,6 +134,7 @@ export function GenerationView() {
       {/* Success Message */}
       {successMessage && (
         <div
+          data-testid="success-message"
           className="p-4 rounded-md bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200"
           role="status"
           aria-live="polite"
@@ -153,6 +156,7 @@ export function GenerationView() {
       {/* Error Message */}
       {error && (
         <div
+          data-testid="error-message"
           className="p-4 rounded-md bg-destructive/10 border border-destructive text-destructive"
           role="alert"
           aria-live="assertive"
@@ -173,8 +177,14 @@ export function GenerationView() {
               />
             </svg>
             <div className="space-y-2 flex-1">
-              <p className="font-medium">{error}</p>
-              <button onClick={() => setError(null)} className="text-sm underline-offset-4 hover:underline">
+              <p className="font-medium" data-testid="error-message-text">
+                {error}
+              </p>
+              <button
+                data-testid="error-message-close"
+                onClick={() => setError(null)}
+                className="text-sm underline-offset-4 hover:underline"
+              >
                 Zamknij
               </button>
             </div>
@@ -190,7 +200,7 @@ export function GenerationView() {
 
       {/* Suggestions List */}
       {isReviewing && suggestions.length > 0 && (
-        <div ref={suggestionsRef}>
+        <div ref={suggestionsRef} data-testid="suggestions-container">
           <SuggestionsList
             suggestions={suggestions}
             onAcceptSelected={handleAccept}

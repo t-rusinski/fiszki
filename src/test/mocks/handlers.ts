@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse } from "msw";
 
 /**
  * MSW Request Handlers
@@ -6,34 +6,34 @@ import { http, HttpResponse } from 'msw';
  */
 export const handlers = [
   // Example: Mock Supabase auth endpoint
-  http.post('/auth/v1/token', () => {
+  http.post("/auth/v1/token", () => {
     return HttpResponse.json({
-      access_token: 'mock-access-token',
-      token_type: 'bearer',
+      access_token: "mock-access-token",
+      token_type: "bearer",
       expires_in: 3600,
-      refresh_token: 'mock-refresh-token',
+      refresh_token: "mock-refresh-token",
       user: {
-        id: 'mock-user-id',
-        email: 'test@example.com',
+        id: "mock-user-id",
+        email: "test@example.com",
       },
     });
   }),
 
   // Example: Mock API endpoint
-  http.get('/api/flashcards', () => {
+  http.get("/api/flashcards", () => {
     return HttpResponse.json({
       data: [
-        { id: '1', front: 'Question 1', back: 'Answer 1' },
-        { id: '2', front: 'Question 2', back: 'Answer 2' },
+        { id: "1", front: "Question 1", back: "Answer 1" },
+        { id: "2", front: "Question 2", back: "Answer 2" },
       ],
     });
   }),
 
   // Example: Mock error response
-  http.get('/api/error', () => {
+  http.get("/api/error", () => {
     return HttpResponse.json(
       {
-        error: 'Internal Server Error',
+        error: "Internal Server Error",
       },
       { status: 500 }
     );

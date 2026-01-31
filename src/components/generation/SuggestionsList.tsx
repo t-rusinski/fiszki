@@ -32,7 +32,6 @@ export function SuggestionsList({ suggestions, onAcceptSelected, onAcceptAll, is
   }, [suggestions]);
 
   const selectedCount = suggestionStates.filter((s) => s.isChecked).length;
-  const hasSelections = selectedCount > 0;
 
   const handleCheck = useCallback((id: string, checked: boolean) => {
     setSuggestionStates((prev) => prev.map((s) => (s.id === id ? { ...s, isChecked: checked } : s)));
@@ -61,12 +60,12 @@ export function SuggestionsList({ suggestions, onAcceptSelected, onAcceptAll, is
 
   const handleAcceptSelected = useCallback(() => {
     const selected = suggestionStates.filter((s) => s.isChecked);
-    const flashcards = selected.map(({ id, isChecked, isEdited, ...rest }) => rest);
+    const flashcards = selected.map(({ id: _id, isChecked: _isChecked, isEdited: _isEdited, ...rest }) => rest);
     onAcceptSelected(flashcards);
   }, [suggestionStates, onAcceptSelected]);
 
   const handleAcceptAll = useCallback(() => {
-    const flashcards = suggestionStates.map(({ id, isChecked, isEdited, ...rest }) => rest);
+    const flashcards = suggestionStates.map(({ id: _id, isChecked: _isChecked, isEdited: _isEdited, ...rest }) => rest);
     onAcceptAll(flashcards);
   }, [suggestionStates, onAcceptAll]);
 
@@ -75,7 +74,7 @@ export function SuggestionsList({ suggestions, onAcceptSelected, onAcceptAll, is
   }
 
   return (
-    <section className="w-full space-y-6" aria-labelledby="suggestions-heading">
+    <section className="w-full space-y-6" aria-labelledby="suggestions-heading" data-testid="suggestions-list">
       {/* Header */}
       <div className="space-y-2">
         <h2 id="suggestions-heading" className="text-2xl font-bold">
@@ -85,7 +84,7 @@ export function SuggestionsList({ suggestions, onAcceptSelected, onAcceptAll, is
       </div>
 
       {/* Suggestions Grid */}
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2" data-testid="suggestions-grid">
         {suggestionStates.map((suggestion) => (
           <SuggestionCard
             key={suggestion.id}

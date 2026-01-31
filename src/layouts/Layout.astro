@@ -19,9 +19,8 @@ const { user } = Astro.locals;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <script is:inline>
-      // Prevent flash of wrong theme
-      const theme = localStorage.getItem("theme") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-      document.documentElement.classList.toggle("dark", theme === "dark");
+      // Prevent flash of wrong theme const theme = localStorage.getItem("theme") || window.matchMedia("(prefers-color-scheme:
+dark)").matches ? "dark" : "light"; document.documentElement.classList.toggle("dark", theme === "dark");
     </script>
   </head>
   <body>

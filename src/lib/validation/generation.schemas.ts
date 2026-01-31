@@ -4,16 +4,8 @@ import { z } from "zod";
  * Dozwolone modele OpenRouter
  */
 export const ALLOWED_MODELS = [
-  // Darmowe modele (Free tier) - sprawdzony i działający
-  "mistralai/mistral-7b-instruct:free", // ✅ Zweryfikowany
-  // Niesprawdzone/potencjalnie niestabilne
-  "meta-llama/llama-3.1-8b-instruct:free",
-  "meta-llama/llama-3.2-3b-instruct:free",
-  "qwen/qwen-2-7b-instruct:free",
-  "microsoft/phi-3-mini-128k-instruct:free",
-  // Niestabilne/niedostępne
-  "google/gemini-flash-1.5:free", // ⚠️ Często niedostępny
-  "openai/gpt-oss-20b:free", // ⚠️ Niestabilny
+  // Darmowe modele (Free tier)
+  "arcee-ai/trinity-large-preview:free",
   // Płatne modele (Paid tier)
   "openai/gpt-4",
   "openai/gpt-3.5-turbo",
@@ -38,7 +30,7 @@ export const GenerateFlashcardsSchema = z.object({
     .enum(ALLOWED_MODELS, {
       errorMap: () => ({ message: "Invalid model selected" }),
     })
-    .default("mistralai/mistral-7b-instruct:free"),
+    .default("arcee-ai/trinity-large-preview:free"),
 
   count: z
     .number()

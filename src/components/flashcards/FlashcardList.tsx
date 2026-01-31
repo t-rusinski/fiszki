@@ -78,11 +78,14 @@ export default function FlashcardList({ userJson }: FlashcardListProps) {
 
   useEffect(() => {
     const fetchFlashcards = async () => {
+      // eslint-disable-next-line no-console
       console.log("FlashcardList - userJson:", userJson);
+      // eslint-disable-next-line no-console
       console.log("FlashcardList - user:", user);
 
       // If user is not logged in, use dummy data
       if (!user) {
+        // eslint-disable-next-line no-console
         console.log("No user - showing dummy flashcards");
         setFlashcards(DUMMY_FLASHCARDS);
         setLoading(false);
@@ -91,23 +94,28 @@ export default function FlashcardList({ userJson }: FlashcardListProps) {
 
       // Fetch real flashcards for authenticated users
       try {
+        // eslint-disable-next-line no-console
         console.log("Fetching flashcards for user:", user.id);
         setLoading(true);
         const response = await fetch("/api/flashcards");
 
+        // eslint-disable-next-line no-console
         console.log("API response status:", response.status);
 
         if (!response.ok) {
           const errorText = await response.text();
+          // eslint-disable-next-line no-console
           console.error("API error response:", errorText);
           throw new Error("Failed to fetch flashcards");
         }
 
         const result = await response.json();
+        // eslint-disable-next-line no-console
         console.log("API result:", result);
         // API returns paginated response with { data: FlashcardDTO[], pagination: {...} }
         setFlashcards(result.data || []);
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error("Error fetching flashcards:", err);
         setError(err instanceof Error ? err.message : "Unknown error occurred");
       } finally {
@@ -250,7 +258,6 @@ export default function FlashcardList({ userJson }: FlashcardListProps) {
           );
         })}
       </div>
-
     </div>
   );
 }

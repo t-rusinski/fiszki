@@ -68,10 +68,7 @@ export async function getFreeModels(apiKey: string): Promise<ModelInfo[]> {
  * @param modelIds - Lista ID modeli do sprawdzenia
  * @returns Mapa modelId → dostępność (true/false)
  */
-export async function checkMultipleModels(
-  apiKey: string,
-  modelIds: string[]
-): Promise<Record<string, boolean>> {
+export async function checkMultipleModels(apiKey: string, modelIds: string[]): Promise<Record<string, boolean>> {
   const models = await fetchAvailableModels(apiKey);
   const availableIds = new Set(models.map((m) => m.id));
 
