@@ -1,19 +1,15 @@
-import { expect, type Page } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { expect, type Page } from "@playwright/test";
+import { BasePage } from "./BasePage";
 
 /**
  * Page Object Model for Home Page
  */
 export class HomePage extends BasePage {
-  constructor(page: Page) {
-    super(page);
-  }
-
   /**
    * Navigate to home page
    */
   async navigate() {
-    await this.goto('/');
+    await this.goto("/");
   }
 
   /**
@@ -27,6 +23,6 @@ export class HomePage extends BasePage {
    * Example: Get main heading
    */
   async getMainHeading() {
-    return this.page.locator('h1').first();
+    return this.page.locator("h1").first();
   }
 }

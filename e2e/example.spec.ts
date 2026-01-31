@@ -1,8 +1,8 @@
-import { test, expect } from '@playwright/test';
-import { HomePage } from './pages/HomePage';
+import { test, expect } from "@playwright/test";
+import { HomePage } from "./pages/HomePage";
 
-test.describe('Example E2E Tests', () => {
-  test('should load the homepage', async ({ page }) => {
+test.describe("Example E2E Tests", () => {
+  test("should load the homepage", async ({ page }) => {
     // Arrange
     const homePage = new HomePage(page);
 
@@ -13,20 +13,20 @@ test.describe('Example E2E Tests', () => {
     await homePage.verifyPageLoaded();
   });
 
-  test('should navigate using keyboard', async ({ page }) => {
+  test("should navigate using keyboard", async ({ page }) => {
     // Arrange
     const homePage = new HomePage(page);
     await homePage.navigate();
 
     // Act
-    await page.keyboard.press('Tab');
+    await page.keyboard.press("Tab");
 
     // Assert - verify focused element changed
     const focusedElement = await page.evaluate(() => document.activeElement?.tagName);
     expect(focusedElement).toBeTruthy();
   });
 
-  test('should display main heading', async ({ page }) => {
+  test("should display main heading", async ({ page }) => {
     // Arrange
     const homePage = new HomePage(page);
 

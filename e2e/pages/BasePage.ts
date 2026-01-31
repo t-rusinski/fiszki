@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { Page } from "@playwright/test";
 
 /**
  * Base Page Object Model class
@@ -25,7 +25,7 @@ export class BasePage {
    * Wait for page to be loaded
    */
   async waitForPageLoad() {
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 
   /**
