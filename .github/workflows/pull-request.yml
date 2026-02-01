@@ -91,14 +91,6 @@ jobs:
           path: playwright-report/
           retention-days: 7
 
-      - name: Upload E2E coverage
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: e2e-coverage
-          path: coverage/
-          retention-days: 7
-
   status-comment:
     name: Post Status Comment
     runs-on: ubuntu-latest
@@ -108,17 +100,10 @@ jobs:
       pull-requests: write
     steps:
       - name: Download unit test coverage
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v6
         with:
           name: unit-test-coverage
           path: coverage-unit/
-
-      - name: Download E2E coverage
-        uses: actions/download-artifact@v7
-        with:
-          name: e2e-coverage
-          path: coverage-e2e/
-        continue-on-error: true
 
       - name: Create success comment
         uses: actions/github-script@v8
@@ -126,9 +111,8 @@ jobs:
           script: |
             const fs = require('fs');
 
-            // Read coverage summaries if available
+            // Read coverage summary if available
             let unitCoverage = 'N/A';
-            let e2eCoverage = 'N/A';
 
             try {
               const unitSummary = JSON.parse(fs.readFileSync('coverage-unit/coverage-summary.json', 'utf8'));
@@ -136,14 +120,6 @@ jobs:
               unitCoverage = `${total.lines.pct}% lines, ${total.statements.pct}% statements, ${total.functions.pct}% functions, ${total.branches.pct}% branches`;
             } catch (e) {
               console.log('Could not read unit test coverage summary');
-            }
-
-            try {
-              const e2eSummary = JSON.parse(fs.readFileSync('coverage-e2e/coverage-summary.json', 'utf8'));
-              const total = e2eSummary.total;
-              e2eCoverage = `${total.lines.pct}% lines, ${total.statements.pct}% statements, ${total.functions.pct}% functions, ${total.branches.pct}% branches`;
-            } catch (e) {
-              console.log('Could not read E2E coverage summary');
             }
 
             const body = `## ✅ Pull Request Validation Successful
@@ -158,11 +134,9 @@ jobs:
             | 🧪 Unit Tests | ✅ Passed |
             | 🎭 E2E Tests | ✅ Passed |
 
-            ### Coverage Reports
+            ### Coverage Report
 
             **Unit Tests:** ${unitCoverage}
-
-            **E2E Tests:** ${e2eCoverage}
 
             ---
             *Workflow run: [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*`;
