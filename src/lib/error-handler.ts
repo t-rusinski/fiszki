@@ -17,8 +17,6 @@ import type { ErrorDTO } from "../types";
  * @returns Response with appropriate status code and error body
  */
 export function handleApiError(error: unknown): Response {
-  console.error("API Error:", error);
-
   // Zod validation errors
   if (error instanceof ZodError) {
     const errorDTO: ErrorDTO = {

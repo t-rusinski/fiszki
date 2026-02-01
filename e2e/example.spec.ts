@@ -1,8 +1,8 @@
-import { test, expect } from "@playwright/test";
-import { HomePage } from "./pages/HomePage";
+import { test, expect } from "./fixtures";
+import { HomePage } from "./pages";
 
 test.describe("Example E2E Tests", () => {
-  test("should load the homepage", async ({ page }) => {
+  test("should load the homepage with authenticated user", async ({ page, testUser }) => {
     // Arrange
     const homePage = new HomePage(page);
 
@@ -11,6 +11,8 @@ test.describe("Example E2E Tests", () => {
 
     // Assert
     await homePage.verifyPageLoaded();
+    // User is already authenticated from auth.setup.ts
+    expect(testUser.username).toBeTruthy();
   });
 
   test("should navigate using keyboard", async ({ page }) => {

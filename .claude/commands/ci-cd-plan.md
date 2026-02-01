@@ -5,5 +5,3 @@ na podstwie stanu projektu i dostepnych narzedzi zaprojektuj minimalny setup CI/
 Scenariusz moze byc uruchamiany:
 -manualnie
 -po aktualizacji mastera
-
-wynik scenariusza zapisz do folderu ci-cd-reports z timestampem w nazwie pliku.

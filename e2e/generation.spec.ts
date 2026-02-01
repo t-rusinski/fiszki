@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { GenerationPage } from "./pages/GenerationPage";
+import { GenerationPage } from "./pages";
 
 /**
  * E2E Tests for Generation View

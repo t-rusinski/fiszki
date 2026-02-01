@@ -17,9 +17,9 @@ export class NotFoundError extends Error {
  * 400 Bad Request - Validation error with optional details
  */
 export class ValidationError extends Error {
-  public details?: object;
+  public details?: Record<string, unknown>;
 
-  constructor(message: string, details?: object) {
+  constructor(message: string, details?: Record<string, unknown>) {
     super(message);
     this.name = "VALIDATION_ERROR";
     this.details = details;

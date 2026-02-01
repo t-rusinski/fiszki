@@ -16,17 +16,7 @@ const PUBLIC_PATHS = [
 ];
 
 export const onRequest = defineMiddleware(async ({ locals, cookies, url, request, redirect }, next) => {
-  // Skip auth in test mode
-  const isTestMode = import.meta.env.MODE === "test";
-  if (isTestMode) {
-    locals.user = {
-      email: "test@example.com",
-      id: "test-user-id",
-    };
-    return next();
-  }
-
-  // Create Supabase server instance
+  // Create Supabase server instance (works in all modes including test)
   const supabase = createSupabaseServerInstance({
     cookies,
     headers: request.headers,

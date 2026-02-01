@@ -102,8 +102,8 @@ export function Header({ user }: HeaderProps) {
         <div className="flex flex-1 items-center justify-end gap-2">
           {user && (
             <>
-              <div className="flex items-center gap-2 px-3 py-1 text-sm text-muted-foreground">
-                <User className="h-4 w-4" />
+              <div className="flex items-center gap-2 px-3 py-1 text-sm text-muted-foreground" data-testid="user-info">
+                <User className="h-4 w-4" data-testid="user-avatar" />
                 <span>{user.email}</span>
               </div>
               <Button variant="ghost" size="icon" onClick={handleLogout} disabled={isLoggingOut} aria-label="Wyloguj">

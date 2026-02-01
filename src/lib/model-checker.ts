@@ -36,6 +36,7 @@ export async function fetchAvailableModels(apiKey: string): Promise<ModelInfo[]>
     const data = await response.json();
     return data.data as ModelInfo[];
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("Error fetching models:", error);
     return [];
   }

@@ -225,6 +225,7 @@ export class GenerationService {
       });
     } catch (logError) {
       // Silent fail - don't throw error if logging fails
+      // eslint-disable-next-line no-console
       console.error("Failed to log generation error:", logError);
     }
   }
@@ -290,6 +291,7 @@ export class GenerationService {
 
     if (updateError) {
       // Log but don't fail - flashcards were already created
+      // eslint-disable-next-line no-console
       console.error("Failed to update generation statistics:", updateError);
     }
 

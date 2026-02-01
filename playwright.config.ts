@@ -39,13 +39,38 @@ export default defineConfig({
 
     /* Video on failure */
     video: "retain-on-failure",
+
+    /* E2E test credentials */
+    // @ts-expect-error - Custom property for E2E tests
+    testUser: {
+      username: process.env.E2E_USERNAME,
+      userId: process.env.E2E_USERNAME_ID,
+      password: process.env.E2E_PASSWORD,
+    },
   },
 
   /* Configure projects for major browsers */
   projects: [
+    // Setup project - authenticates once and saves session state
+    // Run manually first: npx playwright test --project=setup
+    {
+      name: "setup",
+      testMatch: /.*\.setup\.ts$/,
+    },
+
+    // Tests that require authentication
+    // Note: Run setup project first to create auth state
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+        // Use saved authentication state from setup
+        // If file doesn't exist, tests will fail - run setup first
+        storageState: "playwright/.auth/user.json",
+      },
+      // dependencies removed for better UI mode experience
+      // You must run setup manually first: npx playwright test --project=setup
+      testIgnore: /.*\.setup\.ts$/,
     },
   ],
 

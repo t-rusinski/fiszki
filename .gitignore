@@ -28,6 +28,7 @@ pnpm-debug.log*
 coverage/
 test-results/
 playwright-report/
+playwright/.auth/
 .nyc_output/
 html/
 
