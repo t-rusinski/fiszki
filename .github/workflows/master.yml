@@ -1,10 +1,12 @@
-name: Test & Build Master
+name: Deploy to Cloudflare Pages
 
 on:
-  push:
-    branches:
-      - master
   workflow_dispatch:
+
+# Cancel in-progress runs when a new push is made to the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lint:
@@ -20,9 +22,10 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-  test:
+  unit-test:
     name: Unit Tests
     runs-on: ubuntu-latest
+    needs: [lint]
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -30,13 +33,17 @@ jobs:
       - name: Setup Node and install dependencies
         uses: ./.github/actions/setup-node-deps
 
-      - name: Run unit tests
+      - name: Run unit tests with coverage
         run: npm run test
 
   build:
-    name: Production Build
+    name: Build for Cloudflare
     runs-on: ubuntu-latest
-    needs: [lint, test]
+    needs: [lint, unit-test]
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -53,3 +60,35 @@ jobs:
           name: dist
           path: dist/
           retention-days: 7
+
+  deploy:
+    name: Deploy to Cloudflare Pages
+    runs-on: ubuntu-latest
+    needs: [build]
+    environment: production
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: dist
+          path: dist/
+
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Output deployment URL
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: echo "Deployed to $DEPLOYMENT_URL"
