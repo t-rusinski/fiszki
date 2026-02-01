@@ -30,3 +30,6 @@ test-results/
 playwright-report/
 .nyc_output/
 html/
+
+# documentation and notes
+markdowns/
