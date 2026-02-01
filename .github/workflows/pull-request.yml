@@ -1,0 +1,175 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    branches:
+      - master
+    types: [opened, synchronize, reopened]
+
+# Cancel in-progress runs when a new push is made to the same PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node and install dependencies
+        uses: ./.github/actions/setup-node-deps
+
+      - name: Run ESLint
+        run: npm run lint
+
+  unit-test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: [lint]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node and install dependencies
+        uses: ./.github/actions/setup-node-deps
+
+      - name: Run unit tests with coverage
+        run: npm run test:coverage
+
+      - name: Upload unit test coverage
+        uses: actions/upload-artifact@v6
+        with:
+          name: unit-test-coverage
+          path: coverage/
+          retention-days: 7
+
+  e2e-test:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: [lint]
+    environment: integration
+    env:
+      BASE_URL: http://localhost:4321
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      E2E_USERNAME_ID: ${{ secrets.E2E_USERNAME_ID }}
+      E2E_USERNAME: ${{ secrets.E2E_USERNAME }}
+      E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node and install dependencies
+        uses: ./.github/actions/setup-node-deps
+        with:
+          install-playwright: "true"
+
+      - name: Create test environment file
+        run: |
+          cat > .env.test << EOF
+          BASE_URL=${{ env.BASE_URL }}
+          SUPABASE_URL=${{ env.SUPABASE_URL }}
+          SUPABASE_KEY=${{ env.SUPABASE_KEY }}
+          OPENROUTER_API_KEY=${{ env.OPENROUTER_API_KEY }}
+          E2E_USERNAME_ID=${{ env.E2E_USERNAME_ID }}
+          E2E_USERNAME=${{ env.E2E_USERNAME }}
+          E2E_PASSWORD=${{ env.E2E_PASSWORD }}
+          EOF
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload E2E coverage
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: e2e-coverage
+          path: coverage/
+          retention-days: 7
+
+  status-comment:
+    name: Post Status Comment
+    runs-on: ubuntu-latest
+    needs: [lint, unit-test, e2e-test]
+    if: success()
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Download unit test coverage
+        uses: actions/download-artifact@v7
+        with:
+          name: unit-test-coverage
+          path: coverage-unit/
+
+      - name: Download E2E coverage
+        uses: actions/download-artifact@v7
+        with:
+          name: e2e-coverage
+          path: coverage-e2e/
+        continue-on-error: true
+
+      - name: Create success comment
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('fs');
+
+            // Read coverage summaries if available
+            let unitCoverage = 'N/A';
+            let e2eCoverage = 'N/A';
+
+            try {
+              const unitSummary = JSON.parse(fs.readFileSync('coverage-unit/coverage-summary.json', 'utf8'));
+              const total = unitSummary.total;
+              unitCoverage = `${total.lines.pct}% lines, ${total.statements.pct}% statements, ${total.functions.pct}% functions, ${total.branches.pct}% branches`;
+            } catch (e) {
+              console.log('Could not read unit test coverage summary');
+            }
+
+            try {
+              const e2eSummary = JSON.parse(fs.readFileSync('coverage-e2e/coverage-summary.json', 'utf8'));
+              const total = e2eSummary.total;
+              e2eCoverage = `${total.lines.pct}% lines, ${total.statements.pct}% statements, ${total.functions.pct}% functions, ${total.branches.pct}% branches`;
+            } catch (e) {
+              console.log('Could not read E2E coverage summary');
+            }
+
+            const body = `## ✅ Pull Request Validation Successful
+
+            All checks have passed successfully!
+
+            ### Test Results
+
+            | Check | Status |
+            |-------|--------|
+            | 🔍 Linting | ✅ Passed |
+            | 🧪 Unit Tests | ✅ Passed |
+            | 🎭 E2E Tests | ✅ Passed |
+
+            ### Coverage Reports
+
+            **Unit Tests:** ${unitCoverage}
+
+            **E2E Tests:** ${e2eCoverage}
+
+            ---
+            *Workflow run: [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });

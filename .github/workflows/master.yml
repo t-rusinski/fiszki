@@ -33,34 +33,10 @@ jobs:
       - name: Run unit tests
         run: npm run test
 
-  test-e2e:
-    name: E2E Tests
-    runs-on: ubuntu-latest
-    needs: [test]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Setup Node and install dependencies
-        uses: ./.github/actions/setup-node-deps
-        with:
-          install-playwright: "true"
-
-      - name: Run E2E tests
-        run: npm run test:e2e
-
-      - name: Upload Playwright report
-        if: failure()
-        uses: actions/upload-artifact@v6
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 7
-
   build:
     name: Production Build
     runs-on: ubuntu-latest
-    needs: [lint, test, test-e2e]
+    needs: [lint, test]
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
