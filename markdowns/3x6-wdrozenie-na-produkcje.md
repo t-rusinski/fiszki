@@ -31,7 +31,7 @@ Na start przyjrzymy się kluczowej koncepcji nowoczesnego procesu wytwarzania op
 
 W świecie ciągłej integracji i dostarczania (CI/CD), te pojęcia często są mylone, ale ich rozróżnienie ma fundamentalne znaczenie dla efektywnego zarządzania ryzykiem i kontroli nad tym, co i kiedy trafia do rąk użytkowników. Na czym polega różnica?
 
-**Deployment** to proces techniczny - umieszczenie nowego kodu na serwerze produkcyjnym. 
+**Deployment** to proces techniczny - umieszczenie nowego kodu na serwerze produkcyjnym.
 
 **Release** to decyzja biznesowa - udostępnienie danej funkcjonalności użytkownikom.
 
@@ -43,7 +43,7 @@ Ale jak to osiągnąć? **Feature toggle** (przełączniki funkcjonalności) poz
 
 W pierwszym klipie tej lekcji pokażę ci, jak implementuję tę koncepcję w aplikacji 10xRules przy pomocy edytora Cursor. Zobaczysz krok po kroku, jak projektować i wdrażać własny moduł do zarządzania ”flagami”, który umożliwi Ci bezpieczne wdrażanie niedokończonego kodu na produkcję i sterowanie stanem aplikacji między środowiskami. Na start nie musi to być SaaS, a prosty moduł w jednym pliku.
 
-W przyszłości zaprezentowane podejście może być rozszerzone, a flagi pobierane z serwera zdalnego, niezależnego od samej aplikacji. Dzięki temu uzyskujesz możliwość natychmiastowego wyłączania problematycznych funkcji bez konieczności wycofywania całego deploymentu, co bywa procesem angażującym dużą część zespołu. 
+W przyszłości zaprezentowane podejście może być rozszerzone, a flagi pobierane z serwera zdalnego, niezależnego od samej aplikacji. Dzięki temu uzyskujesz możliwość natychmiastowego wyłączania problematycznych funkcji bez konieczności wycofywania całego deploymentu, co bywa procesem angażującym dużą część zespołu.
 
 **👉 Komentarz** \- poniższy fragment to etap wyłącznie dla istniejących projektów takich jak 10xRules, gdzie pojawia się faktyczna potrzeba rozdzielania deploymentu i release’ów. Jeśli feature flagi nie są dla ciebie niezbędne a projekt chcesz wystrzelić w stronę produkcji, możesz przejść do kolejnej sekcji.
 
@@ -57,11 +57,11 @@ Dwa słowa komentarza już po nagraniu - wdrażając tę zmianę, zdecydowałem 
 
 ![Ilustracja z lekcji](https://assets-v2.circle.so/9xs88sppr9yk74pwdj68j53cnf2d)
 
-Do tego, w buildzie produkcyjnym dostosowałem jeszcze “ENV\_NAME” biorąc pod uwagę wymagania samego Astro i Vite:
+Do tego, w buildzie produkcyjnym dostosowałem jeszcze “ENV_NAME” biorąc pod uwagę wymagania samego Astro i Vite:
 
 ![Ilustracja z lekcji](https://assets-v2.circle.so/q6cjsykhnoei0x4t0wiyatn72a0r)
 
-W kontekście filmu, aby zabezpieczenie komponentów client-side w React działało również na produkcji, rozszerzyłem zmienną ENV\_NAME o nowy prefix - PUBLIC\_:
+W kontekście filmu, aby zabezpieczenie komponentów client-side w React działało również na produkcji, rozszerzyłem zmienną ENV_NAME o nowy prefix - PUBLIC\_:
 
 ```
 // .env.example (oraz .env.prod, .env.integration, etc.)
@@ -169,7 +169,7 @@ Jeśli twój projekt nie wymaga zależności na stan serwera, system plików czy
 
 ![Ilustracja z lekcji](https://assets-v2.circle.so/3au3gxiaxav7w3u2zxt2dngwc2xm)
 
-W tym miejscu dodaj flagę “**nodejs\_compat**” oraz wybierz preferowaną datę/wersję środowiska (_Compatibility date_) - Cloudflare wersjonuje kolejne zmiany środowiska tak, aby nie popsuć wdrożonych wcześniej aplikacji. W świeżych projektach możesz po prostu wybrać najnowszą możliwą opcję.
+W tym miejscu dodaj flagę “**nodejs_compat**” oraz wybierz preferowaną datę/wersję środowiska (_Compatibility date_) - Cloudflare wersjonuje kolejne zmiany środowiska tak, aby nie popsuć wdrożonych wcześniej aplikacji. W świeżych projektach możesz po prostu wybrać najnowszą możliwą opcję.
 
 A dlaczego nie jest to włączone domyślnie? Całość działa podobnie do tzw. [polyfilli](https://developer.mozilla.org/en-US/docs/Glossary/Polyfill) w środowisku przeglądarki - każda dodatkowa funkcja lub moduł zapewniający kompatybilność to pewien narzut na czas startu i rozmiar funkcji. Cloudflare preferuje podejście _serverless_, więc unika dodawania elementów, które łamią ten bezstanowy model działania aplikacji.
 
@@ -177,7 +177,7 @@ Jeśli potrzebujesz klasycznego stanowego backendu a nie chcesz zmieniać hostin
 
 ### Debugowanie Cloudflare Functions
 
-Jeśli w trakcie wdrożenia napotkasz problemy z ładowaniem strony, do zidentyfikowania problemu wykorzystaj podgląd logów Cloudflare Functions w zakładce Deployments → Functions. 
+Jeśli w trakcie wdrożenia napotkasz problemy z ładowaniem strony, do zidentyfikowania problemu wykorzystaj podgląd logów Cloudflare Functions w zakładce Deployments → Functions.
 
 Przedstawiamy tę funkcję na krótkim klipie poniżej:
 
@@ -221,11 +221,11 @@ Jedną z potencjalnych platform, na których w łatwy sposób umieścisz przygot
 
 Będzie on rozdzielony na trzy etapy:
 
-1) Etap QA - Ogólna ocena jakości brancha master (lint, unit test)
+1. Etap QA - Ogólna ocena jakości brancha master (lint, unit test)
 
-2) Przygotowanie kontenera i opublikowanie go na GHCR.io
+2. Przygotowanie kontenera i opublikowanie go na GHCR.io
 
-3) Request w kierunku DigitalOcean API aby pobrać kontener i wykonać nowy Deployment
+3. Request w kierunku DigitalOcean API aby pobrać kontener i wykonać nowy Deployment
 
 ![Ilustracja z lekcji](https://assets-v2.circle.so/2asp48j9tzvct4pyz2ksi8x71ohv)
 
@@ -258,7 +258,7 @@ A jak utworzyć sam projekt? Skorzystaj z App Platform:
 
 ![Ilustracja z lekcji](https://assets-v2.circle.so/n4nqyw9nivscwy8pyxj7irfa8qgy)
 
-W konfiguracji podaj właściwy klucz kontenera APP\_OWNER/APP\_NAME:
+W konfiguracji podaj właściwy klucz kontenera APP_OWNER/APP_NAME:
 
 ![Ilustracja z lekcji](https://assets-v2.circle.so/kg8833naozjc5898qqf13cb8kjjr)
 
@@ -300,4 +300,4 @@ Trzymamy kciuki za realizację projektów w oparciu o materiały z lekcji, a w r
 
 1. Dla projektów Astro - wykorzystaj popularne chmury frontendowe (FREE)
 2. Dla stacków “non-Astro” - przeprowadź deployment na wybrany hosting dopasowany do stacku (np. w oparciu o DigitalOcean i Dockera, lub własny serwer aplikacji).
-![Ilustracja z lekcji](https://assets-v2.circle.so/ekrtcr8j44qd531ut1i2iwox5c9h)
+   ![Ilustracja z lekcji](https://assets-v2.circle.so/ekrtcr8j44qd531ut1i2iwox5c9h)

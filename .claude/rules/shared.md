@@ -1,8 +1,9 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
+
 # AI Rules for fiszki
 
 fiszki is a web application that enables the automatic generation of flashcards using artificial intelligence. The aim of the project is to significantly speed up and simplify the process of creating fiches, enabling users to quickly transform the text they enter (copy-paste) into high-quality flashcards for learning.

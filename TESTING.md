@@ -5,6 +5,7 @@ This project is configured with comprehensive testing infrastructure for both un
 ## 📦 Installed Dependencies
 
 ### Unit Testing
+
 - **Vitest**: Fast unit test framework for TypeScript/JavaScript
 - **@vitest/ui**: Interactive UI for test visualization
 - **@testing-library/react**: Testing utilities for React components
@@ -14,6 +15,7 @@ This project is configured with comprehensive testing infrastructure for both un
 - **MSW**: Mock Service Worker for API mocking
 
 ### E2E Testing
+
 - **@playwright/test**: Modern E2E testing framework with Chromium support
 
 ## 🏗️ Project Structure
@@ -77,11 +79,11 @@ Place test files next to the code they test with `.test.ts` or `.spec.ts` extens
 
 ```typescript
 // src/lib/utils.test.ts
-import { describe, it, expect, vi } from 'vitest';
-import { renderWithProviders, screen } from '@/test/test-utils';
+import { describe, it, expect, vi } from "vitest";
+import { renderWithProviders, screen } from "@/test/test-utils";
 
-describe('Utils', () => {
-  it('should demonstrate basic test', () => {
+describe("Utils", () => {
+  it("should demonstrate basic test", () => {
     // Arrange
     const input = 1 + 1;
 
@@ -100,17 +102,17 @@ Place test files in the `e2e/` directory with `.spec.ts` extension:
 
 ```typescript
 // e2e/auth.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Authentication', () => {
-  test('should login successfully', async ({ page }) => {
-    await page.goto('/login');
+test.describe("Authentication", () => {
+  test("should login successfully", async ({ page }) => {
+    await page.goto("/login");
 
-    await page.fill('input[name="email"]', 'test@example.com');
-    await page.fill('input[name="password"]', 'password');
+    await page.fill('input[name="email"]', "test@example.com");
+    await page.fill('input[name="password"]', "password");
     await page.click('button[type="submit"]');
 
-    await expect(page).toHaveURL('/dashboard');
+    await expect(page).toHaveURL("/dashboard");
   });
 });
 ```
@@ -160,12 +162,14 @@ test.describe('Authentication', () => {
 ## 📊 Coverage Reports
 
 After running `npm run test:coverage`, coverage reports are generated in:
+
 - `coverage/` - HTML, JSON, and text reports
 - Open `coverage/index.html` in browser for interactive coverage explorer
 
 ### Current Coverage Status
 
 ✅ **100% Coverage** achieved for critical components:
+
 - `src/lib/validation/flashcard.schemas.ts` (72 tests)
 - `src/lib/validation/generation.schemas.ts` (54 tests)
 - `src/lib/error-handler.ts` (43 tests)
@@ -176,6 +180,7 @@ See `.ai/test-implementation-summary.md` for detailed test coverage report.
 ## 🔍 Debugging Tests
 
 ### Unit Tests
+
 ```bash
 # Run specific test file
 npm test -- src/lib/utils.test.ts
@@ -188,6 +193,7 @@ npm run test:ui
 ```
 
 ### E2E Tests
+
 ```bash
 # Run specific test file
 npm run test:e2e -- e2e/auth.spec.ts
@@ -204,17 +210,21 @@ npm run test:e2e:debug
 ### Unit Tests
 
 **Issue**: "Cannot find module '@/components/Button'"
+
 - **Solution**: Check path alias configuration in `vitest.config.ts`
 
 **Issue**: "Document is not defined"
+
 - **Solution**: Ensure test environment is set to 'jsdom' in config
 
 ### E2E Tests
 
 **Issue**: "Target page, context or browser has been closed"
+
 - **Solution**: Increase timeout or check for navigation issues
 
 **Issue**: "browserType.launch: Executable doesn't exist"
+
 - **Solution**: Run `npx playwright install chromium`
 
 ## 📚 Additional Resources

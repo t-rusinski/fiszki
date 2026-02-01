@@ -144,7 +144,6 @@ export function GenerationForm({ onGenerate, isGenerating }: GenerationFormProps
             "disabled:opacity-50 disabled:cursor-not-allowed",
             error && "border-destructive focus:ring-destructive"
           )}
-          autoFocus
         />
 
         {/* Character Counter */}

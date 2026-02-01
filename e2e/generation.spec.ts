@@ -10,9 +10,9 @@ test.describe("Generation View - Flashcard Generation", () => {
 
   // Valid source text for testing (1500 characters)
   const validSourceText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ".repeat(30);
-  const shortText = "Too short text";
+  const _shortText = "Too short text";
   // Long text just over limit: 10100 chars (357 repetitions of 28 chars + 4 extra)
-  const longText = "Lorem ipsum dolor sit amet. ".repeat(361);
+  const _longText = "Lorem ipsum dolor sit amet. ".repeat(361);
 
   test.beforeEach(async ({ page }) => {
     generationPage = new GenerationPage(page);

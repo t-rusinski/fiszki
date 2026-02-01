@@ -1,6 +1,7 @@
 Przejdz przez kluczowe komponent powiazane z tym scenariuszem dodajac atrybyty data-test-id o wartosciach dopasowanych do znaczenia danego elementu lub akcji
 
 Scenariusze testowe E2E dla GenerationView
+
 1. Happy Path - Pełny flow generowania i zapisywania fiszek
 
 - Użytkownik otwiera stronę generowania fiszek
@@ -39,5 +40,3 @@ Scenariusze testowe E2E dla GenerationView
 - Licznik pokazuje "12000 / 10000" w kolorze czerwonym
 - Widzi komunikat "Tekst jest za długi. Przekroczono limit o 2000 znaków."
 - Przycisk "Generuj fiszki" jest zablokowany
-
-

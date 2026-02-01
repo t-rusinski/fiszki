@@ -68,27 +68,27 @@ Główna metoda do wysyłania zapytań do modeli LLM przez OpenRouter API.
 ```typescript
 interface ChatCompletionRequest {
   // === WYMAGANE ===
-  model: string;                    // ID modelu, np. "openai/gpt-4", "anthropic/claude-3-opus"
-  messages: ChatMessage[];          // Tablica wiadomości (min. 1)
+  model: string; // ID modelu, np. "openai/gpt-4", "anthropic/claude-3-opus"
+  messages: ChatMessage[]; // Tablica wiadomości (min. 1)
 
   // === OPCJONALNE - Parametry Modelu ===
-  temperature?: number;             // 0.0 - 2.0 (default: 1.0)
-                                    // Niższe = bardziej deterministyczne
-                                    // Wyższe = bardziej kreatywne
+  temperature?: number; // 0.0 - 2.0 (default: 1.0)
+  // Niższe = bardziej deterministyczne
+  // Wyższe = bardziej kreatywne
 
-  max_tokens?: number;              // Maksymalna liczba tokenów w odpowiedzi
-                                    // Zalecane: 500-2000 dla fiszek
+  max_tokens?: number; // Maksymalna liczba tokenów w odpowiedzi
+  // Zalecane: 500-2000 dla fiszek
 
-  top_p?: number;                   // 0.0 - 1.0 (default: 1.0)
-                                    // Nucleus sampling - alternatywa dla temperature
+  top_p?: number; // 0.0 - 1.0 (default: 1.0)
+  // Nucleus sampling - alternatywa dla temperature
 
-  frequency_penalty?: number;       // -2.0 - 2.0 (default: 0)
-                                    // Kara za powtarzające się tokeny
-                                    // Dodatnie wartości zmniejszają powtórzenia
+  frequency_penalty?: number; // -2.0 - 2.0 (default: 0)
+  // Kara za powtarzające się tokeny
+  // Dodatnie wartości zmniejszają powtórzenia
 
-  presence_penalty?: number;        // -2.0 - 2.0 (default: 0)
-                                    // Kara za tokeny już obecne w tekście
-                                    // Zachęca do nowych tematów
+  presence_penalty?: number; // -2.0 - 2.0 (default: 0)
+  // Kara za tokeny już obecne w tekście
+  // Zachęca do nowych tematów
 
   // === OPCJONALNE - Structured Output ===
   response_format?: ResponseFormat; // Wymuszenie struktury JSON w odpowiedzi
@@ -99,12 +99,13 @@ interface ChatCompletionRequest {
 
 ```typescript
 interface ChatMessage {
-  role: 'system' | 'user' | 'assistant';
+  role: "system" | "user" | "assistant";
   content: string;
 }
 ```
 
 **Znaczenie ról:**
+
 - **system**: Definiuje zachowanie modelu (np. "You are a flashcard creator")
 - **user**: Wiadomość od użytkownika/promptu
 - **assistant**: Poprzednie odpowiedzi modelu (dla kontekstu konwersacji)
@@ -113,11 +114,11 @@ interface ChatMessage {
 
 ```typescript
 interface ResponseFormat {
-  type: 'json_schema';              // Jedyna wspierana wartość
+  type: "json_schema"; // Jedyna wspierana wartość
   json_schema: {
-    name: string;                   // Nazwa schematu (snake_case, bez spacji)
-    strict: boolean;                // MUSI być true - wymusza zgodność ze schematem
-    schema: Record<string, any>;    // JSON Schema object (nie Zod, już przekonwertowany)
+    name: string; // Nazwa schematu (snake_case, bez spacji)
+    strict: boolean; // MUSI być true - wymusza zgodność ze schematem
+    schema: Record<string, any>; // JSON Schema object (nie Zod, już przekonwertowany)
   };
 }
 ```
@@ -128,26 +129,26 @@ interface ResponseFormat {
 
 ```typescript
 interface ChatCompletionResponse {
-  id: string;                       // Unikalny ID odpowiedzi od OpenRouter
-  model: string;                    // Model użyty do generowania (może różnić się od requestu)
-  created: number;                  // Unix timestamp utworzenia
-  choices: Choice[];                // Tablica wygenerowanych odpowiedzi (zazwyczaj 1)
-  usage: Usage;                     // Statystyki użycia tokenów
+  id: string; // Unikalny ID odpowiedzi od OpenRouter
+  model: string; // Model użyty do generowania (może różnić się od requestu)
+  created: number; // Unix timestamp utworzenia
+  choices: Choice[]; // Tablica wygenerowanych odpowiedzi (zazwyczaj 1)
+  usage: Usage; // Statystyki użycia tokenów
 }
 
 interface Choice {
-  index: number;                    // Indeks wyboru (0 dla pojedynczej odpowiedzi)
-  message: ChatMessage;             // Wygenerowana wiadomość
-  finish_reason: 'stop' | 'length' | 'content_filter' | null;
+  index: number; // Indeks wyboru (0 dla pojedynczej odpowiedzi)
+  message: ChatMessage; // Wygenerowana wiadomość
+  finish_reason: "stop" | "length" | "content_filter" | null;
   // stop = normalne zakończenie
   // length = osiągnięto max_tokens
   // content_filter = zablokowane przez filtr treści
 }
 
 interface Usage {
-  prompt_tokens: number;            // Tokeny użyte w prompcie
-  completion_tokens: number;        // Tokeny użyte w odpowiedzi
-  total_tokens: number;             // Suma tokenów (prompt + completion)
+  prompt_tokens: number; // Tokeny użyte w prompcie
+  completion_tokens: number; // Tokeny użyte w odpowiedzi
+  total_tokens: number; // Suma tokenów (prompt + completion)
 }
 ```
 
@@ -155,19 +156,19 @@ interface Usage {
 
 ```typescript
 const response = await service.complete({
-  model: 'openai/gpt-4',
+  model: "openai/gpt-4",
   messages: [
     {
-      role: 'system',
-      content: 'You are a helpful assistant that creates educational flashcards.'
+      role: "system",
+      content: "You are a helpful assistant that creates educational flashcards.",
     },
     {
-      role: 'user',
-      content: 'Create a flashcard about the Pythagorean theorem.'
-    }
+      role: "user",
+      content: "Create a flashcard about the Pythagorean theorem.",
+    },
   ],
   temperature: 0.7,
-  max_tokens: 500
+  max_tokens: 500,
 });
 
 // Dostęp do odpowiedzi
@@ -183,56 +184,56 @@ console.log(generatedText);
 ```typescript
 // 1. Definicja schematu JSON (WAŻNE: to jest JSON Schema, nie Zod!)
 const flashcardSchema = {
-  type: 'object',
+  type: "object",
   properties: {
     flashcards: {
-      type: 'array',
+      type: "array",
       items: {
-        type: 'object',
+        type: "object",
         properties: {
           front: {
-            type: 'string',
+            type: "string",
             maxLength: 200,
-            description: 'Question on the flashcard'
+            description: "Question on the flashcard",
           },
           back: {
-            type: 'string',
+            type: "string",
             maxLength: 500,
-            description: 'Answer on the flashcard'
-          }
+            description: "Answer on the flashcard",
+          },
         },
-        required: ['front', 'back'],
-        additionalProperties: false
-      }
-    }
+        required: ["front", "back"],
+        additionalProperties: false,
+      },
+    },
   },
-  required: ['flashcards'],
-  additionalProperties: false
+  required: ["flashcards"],
+  additionalProperties: false,
 };
 
 // 2. Wysłanie requestu ze structured output
 const response = await service.complete({
-  model: 'openai/gpt-4',
+  model: "openai/gpt-4",
   messages: [
     {
-      role: 'system',
-      content: 'You are a flashcard generator. Generate flashcards in the specified JSON format.'
+      role: "system",
+      content: "You are a flashcard generator. Generate flashcards in the specified JSON format.",
     },
     {
-      role: 'user',
-      content: 'Generate 5 flashcards about World War II.'
-    }
+      role: "user",
+      content: "Generate 5 flashcards about World War II.",
+    },
   ],
   response_format: {
-    type: 'json_schema',
+    type: "json_schema",
     json_schema: {
-      name: 'flashcard_generation',  // snake_case, bez spacji
-      strict: true,                  // WYMAGANE - wymusza zgodność
-      schema: flashcardSchema        // JSON Schema object
-    }
+      name: "flashcard_generation", // snake_case, bez spacji
+      strict: true, // WYMAGANE - wymusza zgodność
+      schema: flashcardSchema, // JSON Schema object
+    },
   },
   temperature: 0.7,
-  max_tokens: 2000
+  max_tokens: 2000,
 });
 
 // 3. Parsowanie strukturalnej odpowiedzi
@@ -254,15 +255,15 @@ console.log(parsed.flashcards);
 
 ```typescript
 const response = await service.complete({
-  model: 'anthropic/claude-3-opus',
+  model: "anthropic/claude-3-opus",
   messages: [
-    { role: 'system', content: 'You are a creative writing assistant.' },
-    { role: 'user', content: 'Write a unique story opening.' }
+    { role: "system", content: "You are a creative writing assistant." },
+    { role: "user", content: "Write a unique story opening." },
   ],
-  temperature: 1.2,              // Wyższa temperatura = bardziej kreatywne
+  temperature: 1.2, // Wyższa temperatura = bardziej kreatywne
   max_tokens: 1000,
-  presence_penalty: 0.6,         // Zachęca do nowych tematów
-  frequency_penalty: 0.3         // Zmniejsza powtórzenia
+  presence_penalty: 0.6, // Zachęca do nowych tematów
+  frequency_penalty: 0.3, // Zmniejsza powtórzenia
 });
 ```
 
@@ -300,6 +301,7 @@ Wykonuje HTTP POST request do OpenRouter API.
 ```
 
 **Znaczenie opcjonalnych nagłówków:**
+
 - `HTTP-Referer`: Pokazuje źródło requestów w OpenRouter dashboard (ranking)
 - `X-Title`: Wyświetla nazwę aplikacji w statystykach OpenRouter
 
@@ -364,14 +366,14 @@ Mapuje kody statusu HTTP na niestandardowe typy błędów projektu (z `src/lib/e
 
 #### Mapowanie Statusów
 
-| Status HTTP | Typ Błędu | Scenariusz |
-|-------------|-----------|------------|
-| 400 | `ValidationError` | Nieprawidłowe parametry, błędny model, błędny schemat JSON |
-| 401 | `UnauthorizedError` | Nieprawidłowy lub brakujący klucz API |
-| 429 | `RateLimitError` | Przekroczony limit requestów lub limit finansowy |
-| 500 | `ServiceUnavailableError` | Błąd wewnętrzny OpenRouter |
-| 503 | `ServiceUnavailableError` | OpenRouter tymczasowo niedostępny |
-| Network Error | `ServiceUnavailableError` | Timeout, utrata połączenia |
+| Status HTTP   | Typ Błędu                 | Scenariusz                                                 |
+| ------------- | ------------------------- | ---------------------------------------------------------- |
+| 400           | `ValidationError`         | Nieprawidłowe parametry, błędny model, błędny schemat JSON |
+| 401           | `UnauthorizedError`       | Nieprawidłowy lub brakujący klucz API                      |
+| 429           | `RateLimitError`          | Przekroczony limit requestów lub limit finansowy           |
+| 500           | `ServiceUnavailableError` | Błąd wewnętrzny OpenRouter                                 |
+| 503           | `ServiceUnavailableError` | OpenRouter tymczasowo niedostępny                          |
+| Network Error | `ServiceUnavailableError` | Timeout, utrata połączenia                                 |
 
 #### Implementacja
 
@@ -464,11 +466,11 @@ Serwis używa niestandardowych klas błędów z `src/lib/errors.ts` zgodnie z wz
 
 ```typescript
 import {
-  ValidationError,      // 400 - Błędy walidacji
-  UnauthorizedError,    // 401 - Błędy autentykacji
-  RateLimitError,       // 429 - Rate limiting
-  ServiceUnavailableError // 503/500 - Problemy z serwisem
-} from '@/lib/errors';
+  ValidationError, // 400 - Błędy walidacji
+  UnauthorizedError, // 401 - Błędy autentykacji
+  RateLimitError, // 429 - Rate limiting
+  ServiceUnavailableError, // 503/500 - Problemy z serwisem
+} from "@/lib/errors";
 ```
 
 ### 5.2. Szczegółowe Scenariusze Błędów
@@ -480,12 +482,12 @@ import {
 ```typescript
 // Request
 const response = await service.complete({
-  model: 'invalid/model-name',
-  messages: [{ role: 'user', content: 'Hello' }]
+  model: "invalid/model-name",
+  messages: [{ role: "user", content: "Hello" }],
 });
 
 // Rzucony błąd
-throw new ValidationError('Invalid model specified: invalid/model-name');
+throw new ValidationError("Invalid model specified: invalid/model-name");
 ```
 
 **Rozwiązanie**: Sprawdź listę dostępnych modeli na https://openrouter.ai/models
@@ -496,7 +498,7 @@ throw new ValidationError('Invalid model specified: invalid/model-name');
 
 ```typescript
 // Rzucony błąd (HTTP 401)
-throw new UnauthorizedError('Invalid API key provided');
+throw new UnauthorizedError("Invalid API key provided");
 ```
 
 **Rozwiązanie**: Sprawdź poprawność `OPENROUTER_API_KEY` w pliku `.env`
@@ -507,10 +509,11 @@ throw new UnauthorizedError('Invalid API key provided');
 
 ```typescript
 // Rzucony błąd (HTTP 429)
-throw new RateLimitError('Rate limit exceeded. Please try again later.');
+throw new RateLimitError("Rate limit exceeded. Please try again later.");
 ```
 
 **Rozwiązanie**:
+
 - Poczekaj przed kolejnym requestem
 - Sprawdź limity w OpenRouter dashboard
 - Zwiększ limity finansowe jeśli to konieczne
@@ -522,20 +525,22 @@ throw new RateLimitError('Rate limit exceeded. Please try again later.');
 ```typescript
 // Request z błędnym schematem
 const response = await service.complete({
-  model: 'openai/gpt-4',
-  messages: [/* ... */],
+  model: "openai/gpt-4",
+  messages: [
+    /* ... */
+  ],
   response_format: {
-    type: 'json_schema',
+    type: "json_schema",
     json_schema: {
-      name: 'invalid schema',  // ❌ Spacje niedozwolone
+      name: "invalid schema", // ❌ Spacje niedozwolone
       strict: true,
-      schema: { type: 'object' }
-    }
-  }
+      schema: { type: "object" },
+    },
+  },
 });
 
 // Rzucony błąd
-throw new ValidationError('Schema name must be snake_case (lowercase, underscores, no spaces)');
+throw new ValidationError("Schema name must be snake_case (lowercase, underscores, no spaces)");
 ```
 
 **Rozwiązanie**: Użyj snake_case dla nazwy schematu (np. `flashcard_generation`)
@@ -546,10 +551,11 @@ throw new ValidationError('Schema name must be snake_case (lowercase, underscore
 
 ```typescript
 // Rzucony błąd
-throw new ServiceUnavailableError('Request timeout: OpenRouter did not respond');
+throw new ServiceUnavailableError("Request timeout: OpenRouter did not respond");
 ```
 
 **Rozwiązanie**:
+
 - Ponów request
 - Sprawdź połączenie sieciowe
 - Zmniejsz `max_tokens` jeśli generacja jest bardzo długa
@@ -561,12 +567,12 @@ throw new ServiceUnavailableError('Request timeout: OpenRouter did not respond')
 ```typescript
 // Request bez messages
 const response = await service.complete({
-  model: 'openai/gpt-4',
-  messages: []  // ❌ Pusta tablica
+  model: "openai/gpt-4",
+  messages: [], // ❌ Pusta tablica
 });
 
 // Rzucony błąd
-throw new ValidationError('At least one message is required');
+throw new ValidationError("At least one message is required");
 ```
 
 #### Błąd 7: Nieprawidłowa Temperature
@@ -576,13 +582,15 @@ throw new ValidationError('At least one message is required');
 ```typescript
 // Request z nieprawidłową temperature
 const response = await service.complete({
-  model: 'openai/gpt-4',
-  messages: [/* ... */],
-  temperature: 3.0  // ❌ > 2
+  model: "openai/gpt-4",
+  messages: [
+    /* ... */
+  ],
+  temperature: 3.0, // ❌ > 2
 });
 
 // Rzucony błąd
-throw new ValidationError('Temperature must be between 0 and 2');
+throw new ValidationError("Temperature must be between 0 and 2");
 ```
 
 ### 5.3. Obsługa Błędów w Endpoint
@@ -597,10 +605,10 @@ export const POST: APIRoute = async (context) => {
 
     return new Response(JSON.stringify(response), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    return handleApiError(error);  // Centralized error handler
+    return handleApiError(error); // Centralized error handler
   }
 };
 ```
@@ -614,6 +622,7 @@ Funkcja `handleApiError` z `src/lib/error-handler.ts` automatycznie mapuje błę
 ### 6.1. Ochrona Klucza API
 
 #### Problem
+
 Klucz API jest wrażliwy i nie powinien być eksponowany w kodzie klienta.
 
 #### Rozwiązania
@@ -672,15 +681,16 @@ function MyComponent() {
 
 ```typescript
 // ❌ NIEPOPRAWNE
-console.log('API Key:', this.apiKey);
+console.log("API Key:", this.apiKey);
 
 // ✅ POPRAWNE
-console.log('API Key:', '[REDACTED]');
+console.log("API Key:", "[REDACTED]");
 ```
 
 ### 6.2. Walidacja Danych Wejściowych
 
 #### Problem
+
 Niezwalidowane dane wejściowe mogą prowadzić do nieprawidłowych requestów, injection attacks lub nadmiernego wykorzystania API.
 
 #### Rozwiązania
@@ -690,27 +700,27 @@ Niezwalidowane dane wejściowe mogą prowadzić do nieprawidłowych requestów, 
 ```typescript
 // src/lib/validation/generation.schemas.ts
 export const GenerateFlashcardsSchema = z.object({
-  content: z.string()
+  content: z
+    .string()
     .trim()
-    .min(10, 'Content must be at least 10 characters')
-    .max(5000, 'Content must not exceed 5000 characters'),
+    .min(10, "Content must be at least 10 characters")
+    .max(5000, "Content must not exceed 5000 characters"),
 
-  model: z.enum([
-    'openai/gpt-4',
-    'openai/gpt-3.5-turbo',
-    'anthropic/claude-3-opus',
-    'anthropic/claude-3-sonnet'
-  ]).default('openai/gpt-3.5-turbo'),
+  model: z
+    .enum(["openai/gpt-4", "openai/gpt-3.5-turbo", "anthropic/claude-3-opus", "anthropic/claude-3-sonnet"])
+    .default("openai/gpt-3.5-turbo"),
 
-  count: z.number()
-    .int('Count must be an integer')
-    .min(1, 'Must generate at least 1 flashcard')
-    .max(20, 'Cannot generate more than 20 flashcards at once')
+  count: z
+    .number()
+    .int("Count must be an integer")
+    .min(1, "Must generate at least 1 flashcard")
+    .max(20, "Cannot generate more than 20 flashcards at once")
     .default(5),
 
-  temperature: z.number()
-    .min(0, 'Temperature must be at least 0')
-    .max(2, 'Temperature must not exceed 2')
+  temperature: z
+    .number()
+    .min(0, "Temperature must be at least 0")
+    .max(2, "Temperature must not exceed 2")
     .optional()
     .default(0.7),
 });
@@ -725,8 +735,8 @@ export type GenerateFlashcardsInput = z.infer<typeof GenerateFlashcardsSchema>;
 const sanitizePrompt = (content: string): string => {
   return content
     .trim()
-    .slice(0, 5000)  // Max 5000 znaków
-    .replace(/[\x00-\x1F\x7F-\x9F]/g, ''); // Usuń znaki kontrolne
+    .slice(0, 5000) // Max 5000 znaków
+    .replace(/[\x00-\x1F\x7F-\x9F]/g, ""); // Usuń znaki kontrolne
 };
 ```
 
@@ -751,6 +761,7 @@ private validateJsonSchema(schema: any): void {
 ### 6.3. Rate Limiting i Kontrola Kosztów
 
 #### Problem
+
 Nadmierne użycie API może prowadzić do wysokich kosztów lub przekroczenia limitów.
 
 #### Rozwiązania
@@ -767,7 +778,7 @@ class RateLimiter {
     const userRequests = this.requests.get(userId) || [];
 
     // Usuń requesty poza oknem czasowym
-    const recentRequests = userRequests.filter(time => now - time < windowMs);
+    const recentRequests = userRequests.filter((time) => now - time < windowMs);
 
     if (recentRequests.length >= maxRequests) {
       return false;
@@ -785,8 +796,9 @@ const rateLimiter = new RateLimiter();
 export const POST: APIRoute = async (context) => {
   const userId = context.locals.userId;
 
-  if (!rateLimiter.canMakeRequest(userId, 10, 60000)) { // 10 requestów/min
-    throw new RateLimitError('Too many requests. Please try again later.');
+  if (!rateLimiter.canMakeRequest(userId, 10, 60000)) {
+    // 10 requestów/min
+    throw new RateLimitError("Too many requests. Please try again later.");
   }
 
   // Kontynuuj z requestem...
@@ -807,11 +819,7 @@ interface UserQuota {
 }
 
 async function checkUserQuota(userId: string): Promise<boolean> {
-  const { data: quota } = await supabase
-    .from('user_quotas')
-    .select('*')
-    .eq('user_id', userId)
-    .single();
+  const { data: quota } = await supabase.from("user_quotas").select("*").eq("user_id", userId).single();
 
   // Reset jeśli nowy dzień
   if (isNewDay(quota.last_reset)) {
@@ -843,13 +851,13 @@ interface ModelPricing {
 }
 
 const MODEL_PRICING: Record<string, ModelPricing> = {
-  'openai/gpt-4': {
-    model: 'openai/gpt-4',
-    prompt_price_per_million: 30,      // $30 per 1M tokens
-    completion_price_per_million: 60,  // $60 per 1M tokens
+  "openai/gpt-4": {
+    model: "openai/gpt-4",
+    prompt_price_per_million: 30, // $30 per 1M tokens
+    completion_price_per_million: 60, // $60 per 1M tokens
   },
-  'openai/gpt-3.5-turbo': {
-    model: 'openai/gpt-3.5-turbo',
+  "openai/gpt-3.5-turbo": {
+    model: "openai/gpt-3.5-turbo",
     prompt_price_per_million: 0.5,
     completion_price_per_million: 1.5,
   },
@@ -861,11 +869,7 @@ function estimateTokens(text: string): number {
   return Math.ceil(text.length / 4);
 }
 
-function estimateCost(
-  model: string,
-  promptText: string,
-  estimatedCompletionTokens: number
-): number {
+function estimateCost(model: string, promptText: string, estimatedCompletionTokens: number): number {
   const pricing = MODEL_PRICING[model];
   if (!pricing) return 0;
 
@@ -879,19 +883,20 @@ function estimateCost(
 
 // Użycie
 const estimatedCost = estimateCost(
-  'openai/gpt-4',
+  "openai/gpt-4",
   userPrompt,
   2000 // estimated completion tokens
 );
 
 if (estimatedCost > MAX_COST_PER_REQUEST) {
-  throw new ValidationError('Request would exceed cost limit');
+  throw new ValidationError("Request would exceed cost limit");
 }
 ```
 
 ### 6.4. Timeout Configuration
 
 #### Problem
+
 Long-running requests mogą blokować zasoby i prowadzić do timeoutów.
 
 #### Rozwiązania
@@ -900,7 +905,7 @@ Long-running requests mogą blokować zasoby i prowadzić do timeoutów.
 
 ```typescript
 const DEFAULT_TIMEOUT = 30000; // 30 sekund
-const MAX_TIMEOUT = 120000;    // 2 minuty (dla bardzo długich generacji)
+const MAX_TIMEOUT = 120000; // 2 minuty (dla bardzo długich generacji)
 
 // W makeRequest
 const controller = new AbortController();
@@ -930,6 +935,7 @@ const timeout = 120000;
 ### 6.5. Logging i Monitoring
 
 #### Problem
+
 Potrzeba monitorowania użycia bez eksponowania wrażliwych danych.
 
 #### Rozwiązania
@@ -981,18 +987,18 @@ interface ServiceMetrics {
 
 ```typescript
 // Success log
-this.log('info', 'Completion successful', {
+this.log("info", "Completion successful", {
   model: response.model,
   tokens_used: response.usage.total_tokens,
-  duration_ms: Date.now() - startTime
+  duration_ms: Date.now() - startTime,
 });
 
 // Error log
-this.log('error', 'Completion failed', {
+this.log("error", "Completion failed", {
   error_type: error.constructor.name,
   error_message: error.message,
   model: request.model,
-  status_code: error.statusCode
+  status_code: error.statusCode,
 });
 ```
 
@@ -1009,7 +1015,7 @@ Rozszerz istniejący plik o typy OpenRouter.
 // OpenRouter Service Types
 // ============================================================================
 
-export type ChatRole = 'system' | 'user' | 'assistant';
+export type ChatRole = "system" | "user" | "assistant";
 
 export interface ChatMessage {
   role: ChatRole;
@@ -1017,7 +1023,7 @@ export interface ChatMessage {
 }
 
 export interface ResponseFormat {
-  type: 'json_schema';
+  type: "json_schema";
   json_schema: {
     name: string;
     strict: boolean;
@@ -1039,7 +1045,7 @@ export interface ChatCompletionRequest {
 export interface Choice {
   index: number;
   message: ChatMessage;
-  finish_reason: 'stop' | 'length' | 'content_filter' | null;
+  finish_reason: "stop" | "length" | "content_filter" | null;
 }
 
 export interface Usage {
@@ -1060,24 +1066,16 @@ export interface ChatCompletionResponse {
 ### Krok 2: Utworzenie Serwisu `src/services/openrouter.service.ts`
 
 ```typescript
-import type {
-  ChatCompletionRequest,
-  ChatCompletionResponse,
-} from '@/types';
-import {
-  ValidationError,
-  UnauthorizedError,
-  RateLimitError,
-  ServiceUnavailableError,
-} from '@/lib/errors';
+import type { ChatCompletionRequest, ChatCompletionResponse } from "@/types";
+import { ValidationError, UnauthorizedError, RateLimitError, ServiceUnavailableError } from "@/lib/errors";
 
 export class OpenRouterService {
-  private readonly baseURL = 'https://openrouter.ai/api/v1';
+  private readonly baseURL = "https://openrouter.ai/api/v1";
   private readonly apiKey: string;
 
   constructor(apiKey: string) {
-    if (!apiKey || apiKey.trim() === '') {
-      throw new ValidationError('OpenRouter API key is required');
+    if (!apiKey || apiKey.trim() === "") {
+      throw new ValidationError("OpenRouter API key is required");
     }
     this.apiKey = apiKey;
   }
@@ -1096,7 +1094,7 @@ export class OpenRouterService {
     this.validateRequest(request);
 
     try {
-      const response = await this.makeRequest('/chat/completions', request);
+      const response = await this.makeRequest("/chat/completions", request);
 
       if (!response.ok) {
         await this.handleErrorResponse(response);
@@ -1106,20 +1104,22 @@ export class OpenRouterService {
       return data as ChatCompletionResponse;
     } catch (error) {
       // Re-throw custom errors
-      if (error instanceof ValidationError ||
-          error instanceof UnauthorizedError ||
-          error instanceof RateLimitError ||
-          error instanceof ServiceUnavailableError) {
+      if (
+        error instanceof ValidationError ||
+        error instanceof UnauthorizedError ||
+        error instanceof RateLimitError ||
+        error instanceof ServiceUnavailableError
+      ) {
         throw error;
       }
 
       // Handle network errors
-      if (error instanceof Error && error.name === 'AbortError') {
-        throw new ServiceUnavailableError('Request timeout: OpenRouter did not respond');
+      if (error instanceof Error && error.name === "AbortError") {
+        throw new ServiceUnavailableError("Request timeout: OpenRouter did not respond");
       }
 
       throw new ServiceUnavailableError(
-        `Unexpected error communicating with OpenRouter: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `Unexpected error communicating with OpenRouter: ${error instanceof Error ? error.message : "Unknown error"}`
       );
     }
   }
@@ -1133,12 +1133,12 @@ export class OpenRouterService {
 
     try {
       const response = await fetch(`${this.baseURL}${endpoint}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': 'https://10xdevs.pl',
-          'X-Title': 'Fiszki App',
+          Authorization: `Bearer ${this.apiKey}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": "https://10xdevs.pl",
+          "X-Title": "Fiszki App",
         },
         body: JSON.stringify(body),
         signal: controller.signal,
@@ -1154,22 +1154,22 @@ export class OpenRouterService {
    * Waliduje parametry requestu przed wysłaniem
    */
   private validateRequest(request: ChatCompletionRequest): void {
-    if (!request.model || request.model.trim() === '') {
-      throw new ValidationError('Model name is required');
+    if (!request.model || request.model.trim() === "") {
+      throw new ValidationError("Model name is required");
     }
 
     if (!request.messages || request.messages.length === 0) {
-      throw new ValidationError('At least one message is required');
+      throw new ValidationError("At least one message is required");
     }
 
     if (request.temperature !== undefined) {
       if (request.temperature < 0 || request.temperature > 2) {
-        throw new ValidationError('Temperature must be between 0 and 2');
+        throw new ValidationError("Temperature must be between 0 and 2");
       }
     }
 
     if (request.max_tokens !== undefined && request.max_tokens <= 0) {
-      throw new ValidationError('max_tokens must be positive');
+      throw new ValidationError("max_tokens must be positive");
     }
 
     // Walidacja response_format
@@ -1177,17 +1177,15 @@ export class OpenRouterService {
       const { name, schema, strict } = request.response_format.json_schema;
 
       if (!name || !/^[a-z][a-z0-9_]*$/.test(name)) {
-        throw new ValidationError(
-          'Schema name must be snake_case (lowercase, underscores, no spaces)'
-        );
+        throw new ValidationError("Schema name must be snake_case (lowercase, underscores, no spaces)");
       }
 
-      if (!schema || typeof schema !== 'object') {
-        throw new ValidationError('Schema must be a valid JSON Schema object');
+      if (!schema || typeof schema !== "object") {
+        throw new ValidationError("Schema must be a valid JSON Schema object");
       }
 
       if (strict !== true) {
-        throw new ValidationError('Schema strict mode must be enabled (strict: true)');
+        throw new ValidationError("Schema strict mode must be enabled (strict: true)");
       }
     }
   }
@@ -1205,7 +1203,7 @@ export class OpenRouterService {
         errorMessage = errorData.error.message;
       }
     } catch {
-      errorMessage = await response.text() || errorMessage;
+      errorMessage = (await response.text()) || errorMessage;
     }
 
     // Mapowanie statusów HTTP na typy błędów
@@ -1230,37 +1228,42 @@ export class OpenRouterService {
 Dodaj/rozszerz `src/lib/validation/generation.schemas.ts`:
 
 ```typescript
-import { z } from 'zod';
+import { z } from "zod";
 
 // Dozwolone modele OpenRouter
 export const ALLOWED_MODELS = [
-  'openai/gpt-4',
-  'openai/gpt-3.5-turbo',
-  'anthropic/claude-3-opus',
-  'anthropic/claude-3-sonnet',
-  'anthropic/claude-3-haiku',
-  'google/gemini-pro',
+  "openai/gpt-4",
+  "openai/gpt-3.5-turbo",
+  "anthropic/claude-3-opus",
+  "anthropic/claude-3-sonnet",
+  "anthropic/claude-3-haiku",
+  "google/gemini-pro",
 ] as const;
 
 export const GenerateFlashcardsSchema = z.object({
-  content: z.string()
+  content: z
+    .string()
     .trim()
-    .min(10, 'Content must be at least 10 characters')
-    .max(5000, 'Content must not exceed 5000 characters'),
+    .min(10, "Content must be at least 10 characters")
+    .max(5000, "Content must not exceed 5000 characters"),
 
-  model: z.enum(ALLOWED_MODELS, {
-    errorMap: () => ({ message: 'Invalid model selected' })
-  }).default('openai/gpt-3.5-turbo'),
+  model: z
+    .enum(ALLOWED_MODELS, {
+      errorMap: () => ({ message: "Invalid model selected" }),
+    })
+    .default("openai/gpt-3.5-turbo"),
 
-  count: z.number()
-    .int('Count must be an integer')
-    .min(1, 'Must generate at least 1 flashcard')
-    .max(20, 'Cannot generate more than 20 flashcards at once')
+  count: z
+    .number()
+    .int("Count must be an integer")
+    .min(1, "Must generate at least 1 flashcard")
+    .max(20, "Cannot generate more than 20 flashcards at once")
     .default(5),
 
-  temperature: z.number()
-    .min(0, 'Temperature must be at least 0')
-    .max(2, 'Temperature must not exceed 2')
+  temperature: z
+    .number()
+    .min(0, "Temperature must be at least 0")
+    .max(2, "Temperature must not exceed 2")
     .optional()
     .default(0.7),
 });
@@ -1273,21 +1276,21 @@ export type GenerateFlashcardsInput = z.infer<typeof GenerateFlashcardsSchema>;
 Utwórz lub zmodyfikuj `src/pages/api/generations/generate.ts`:
 
 ```typescript
-import type { APIRoute } from 'astro';
-import { OpenRouterService } from '@/services/openrouter.service';
-import { GenerateFlashcardsSchema } from '@/lib/validation/generation.schemas';
-import { handleApiError } from '@/lib/error-handler';
-import { ServiceUnavailableError } from '@/lib/errors';
+import type { APIRoute } from "astro";
+import { OpenRouterService } from "@/services/openrouter.service";
+import { GenerateFlashcardsSchema } from "@/lib/validation/generation.schemas";
+import { handleApiError } from "@/lib/error-handler";
+import { ServiceUnavailableError } from "@/lib/errors";
 
 // Tymczasowe userId (do zastąpienia autentykacją)
-const DEFAULT_USER_ID = '00000000-0000-0000-0000-000000000000';
+const DEFAULT_USER_ID = "00000000-0000-0000-0000-000000000000";
 
 export const POST: APIRoute = async (context) => {
   try {
     // 1. Pobranie API key
     const apiKey = import.meta.env.OPENROUTER_API_KEY;
     if (!apiKey) {
-      throw new ServiceUnavailableError('OpenRouter API key not configured');
+      throw new ServiceUnavailableError("OpenRouter API key not configured");
     }
 
     // 2. Walidacja input
@@ -1296,22 +1299,22 @@ export const POST: APIRoute = async (context) => {
 
     // 3. Przygotowanie schematu JSON dla fiszek
     const flashcardSchema = {
-      type: 'object',
+      type: "object",
       properties: {
         flashcards: {
-          type: 'array',
+          type: "array",
           items: {
-            type: 'object',
+            type: "object",
             properties: {
-              front: { type: 'string', maxLength: 200 },
-              back: { type: 'string', maxLength: 500 },
+              front: { type: "string", maxLength: 200 },
+              back: { type: "string", maxLength: 500 },
             },
-            required: ['front', 'back'],
+            required: ["front", "back"],
             additionalProperties: false,
           },
         },
       },
-      required: ['flashcards'],
+      required: ["flashcards"],
       additionalProperties: false,
     };
 
@@ -1321,20 +1324,21 @@ export const POST: APIRoute = async (context) => {
       model: validatedInput.model,
       messages: [
         {
-          role: 'system',
-          content: 'You are a helpful flashcard generator. Create high-quality flashcards from the provided content. Each flashcard should have a concise question on the front and a clear answer on the back.',
+          role: "system",
+          content:
+            "You are a helpful flashcard generator. Create high-quality flashcards from the provided content. Each flashcard should have a concise question on the front and a clear answer on the back.",
         },
         {
-          role: 'user',
+          role: "user",
           content: `Generate exactly ${validatedInput.count} flashcards from the following content:\n\n${validatedInput.content}`,
         },
       ],
       temperature: validatedInput.temperature,
       max_tokens: 2000,
       response_format: {
-        type: 'json_schema',
+        type: "json_schema",
         json_schema: {
-          name: 'flashcard_generation',
+          name: "flashcard_generation",
           strict: true,
           schema: flashcardSchema,
         },
@@ -1353,7 +1357,7 @@ export const POST: APIRoute = async (context) => {
       }),
       {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }
     );
   } catch (error) {
@@ -1415,6 +1419,7 @@ curl -X POST http://localhost:4321/api/generations/generate \
 ```
 
 **Oczekiwana odpowiedź:**
+
 ```json
 {
   "flashcards": [

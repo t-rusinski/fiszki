@@ -1,5 +1,5 @@
 Zamień poprzedniego prompta na prośbę o zatrzymanie implementacji i utworzenie pliku
-ze statusem prac  .ai/{view-name}-implementation-status, który wykorzystasz w nowym wątku:
+ze statusem prac .ai/{view-name}-implementation-status, który wykorzystasz w nowym wątku:
 
 Podsumuj swoją pracę w pliku .ai/{nazwa-zadania}-implementation-status.md w formacie markdown:
 
@@ -7,10 +7,12 @@ Podsumuj swoją pracę w pliku .ai/{nazwa-zadania}-implementation-status.md w fo
 # Status implementacji widoku {nazwa widoku}
 
 ## Zrealizowane kroki
+
 [Szczegółowa lista zrealizowanych kroków]
 
 ## Kolejne kroki
+
 [Lista dalszych kroków, zgodna z planem implementacji]
 ```
 
-Po utworzeniu pliku ze statusem, napisz "Gotowe". Na tym zakończ pracę w tym wątku. 
+Po utworzeniu pliku ze statusem, napisz "Gotowe". Na tym zakończ pracę w tym wątku.

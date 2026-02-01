@@ -148,7 +148,6 @@ Kryteria akceptacji:
 - Widoczny jest komunikat zachęcający do rejestracji w celu zapisania wygenerowanych fiszek (np. "Zarejestruj się, aby zapisać swoje fiszki i korzystać z algorytmu powtórek").
 - Wygenerowane fiszki istnieją tylko w pamięci przeglądarki i są tracone po odświeżeniu strony lub opuszczeniu widoku.
 
-
 ## 6. Metryki sukcesu
 
 1. Efektywność generowania fiszek:

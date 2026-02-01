@@ -1,8 +1,9 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
+
 Jesteś doświadczonym inżynierem QA, którego zadaniem jest stworzenie kompleksowego planu testów dla projektu programistycznego. Przeanalizuj poniższe informacje o projekcie:
 
 <kod_projektu>
@@ -12,12 +13,12 @@ Jesteś doświadczonym inżynierem QA, którego zadaniem jest stworzenie komplek
 
 <struktura_projektu>
 ├── src/
-│   ├── layouts/    # Astro layouts
-│   ├── pages/      # Astro pages
-│   │   └── api/    # API endpoints
-│   ├── components/ # UI components (Astro & React)
-│   └── assets/     # Static assets
-├── public/         # Public assets
+│ ├── layouts/ # Astro layouts
+│ ├── pages/ # Astro pages
+│ │ └── api/ # API endpoints
+│ ├── components/ # UI components (Astro & React)
+│ └── assets/ # Static assets
+├── public/ # Public assets
 </struktura_projektu>
 
 <stos_technologiczny>
@@ -55,6 +56,7 @@ Po zakończeniu analizy, stwórz plan testów wewnątrz bloku <plan_testów>. Pl
 10. Procedury raportowania błędów
 
 Pamiętaj, aby plan testów był:
+
 - Dokładnie dostosowany do kontekstu projektu
 - Uwzględniał specyfikę wykorzystywanych technologii
 - Priorytetyzował kluczowe elementy repozytorium

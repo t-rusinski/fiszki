@@ -256,7 +256,6 @@ interface SuggestionCardProps {
 
 ---
 
-
 ### BulkActions.tsx
 
 **Opis:** Panel z akcjami masowymi na dole listy propozycji. Pozwala na zapisanie wszystkich lub tylko zaznaczonych fiszek.
@@ -1648,6 +1647,7 @@ Plan implementacji obejmuje 13 kroków od przygotowania struktury plików po dok
 7. **UX:** Auto-scroll, smooth transitions, responsive design
 
 **Podejście architektoniczne:**
+
 - Liczniki znaków i komunikaty walidacyjne zintegrowane inline w komponentach
 - Formularz edycji zintegrowany w SuggestionCard (nie osobny komponent)
 - BulkActions jako jedyny osobny komponent pomocniczy

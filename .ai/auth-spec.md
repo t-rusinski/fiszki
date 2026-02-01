@@ -9,6 +9,7 @@ System autentykacji został zaprojektowany z wykorzystaniem Supabase Auth jako d
 ### 1.1 Zakres MVP vs Przyszłe wersje
 
 **Zakres MVP (zgodnie z PRD):**
+
 - Rejestracja i logowanie użytkowników (email + hasło)
 - Natychmiastowa aktywacja konta po rejestracji (bez email confirmation)
 - Wylogowanie
@@ -17,6 +18,7 @@ System autentykacji został zaprojektowany z wykorzystaniem Supabase Auth jako d
 - Ochrona tras i autoryzacja dostępu do danych
 
 **Poza zakresem MVP (oznaczone jako [OPCJONALNE]):**
+
 - Resetowanie hasła (forgot/reset password flow)
 - Potwierdzanie email przy rejestracji
 - Strona ustawień użytkownika
@@ -29,21 +31,25 @@ Wszystkie sekcje oznaczone jako "[OPCJONALNE - POZA MVP]" mogą być zaimplement
 ### 2.1 Przegląd struktury stron i komponentów
 
 Aplikacja będzie działać w dwóch trybach:
+
 - **Tryb niezalogowany (non-auth)**: Dostęp tylko do `/login`, `/register` oraz widoku demo generowania fiszek
 - **Tryb zalogowany (auth)**: Dostęp do pełnej funkcjonalności aplikacji z chronionych tras
 
 #### 2.1.1 Struktura routingu
 
 **Strony publiczne (dostępne bez logowania):**
+
 - `/login` - Strona logowania
 - `/register` - Strona rejestracji
 - `/generate` - Widok demo generowania fiszek (tylko odczyt, bez zapisywania)
 
 **Strony publiczne (opcjonalne dla przyszłych wersji - poza MVP):**
+
 - `/forgot-password` - Strona resetowania hasła (wysyłka emaila)
 - `/reset-password` - Strona ustawiania nowego hasła (z tokenu w linku)
 
 **Strony chronione (wymagają autentykacji):**
+
 - `/` - Strona główna (przekierowuje do `/generate` dla zalogowanych)
 - `/generate` - Pełny widok generowania z możliwością zapisu
 - `/flashcards` - Lista fiszek użytkownika
@@ -57,6 +63,7 @@ Aplikacja będzie działać w dwóch trybach:
 **Plik**: `src/pages/login.astro`
 
 **Struktura**:
+
 ```
 <Layout title="Logowanie">
   <main class="min-h-screen bg-background flex items-center justify-center">
@@ -68,12 +75,14 @@ Aplikacja będzie działać w dwóch trybach:
 ```
 
 **Odpowiedzialność strony Astro**:
+
 - Renderowanie layoutu strony
 - Server-side sprawdzenie czy użytkownik jest już zalogowany (redirect do `/generate` jeśli tak)
 - Obsługa query params (np. `?error=invalid_credentials`, `?return=/flashcards`)
 - SEO meta tags
 
 **Server-side logic w Astro**:
+
 ```typescript
 // W pliku login.astro (kod frontmatter)
 const session = await Astro.locals.supabase.auth.getSession();
@@ -90,6 +99,7 @@ const returnUrl = Astro.url.searchParams.get("return") || "/generate";
 **Plik**: `src/components/auth/LoginForm.tsx`
 
 **Props**:
+
 ```typescript
 interface LoginFormProps {
   errorCode?: string | null;
@@ -98,6 +108,7 @@ interface LoginFormProps {
 ```
 
 **Stan komponentu**:
+
 ```typescript
 interface LoginFormState {
   email: string;
@@ -112,6 +123,7 @@ interface LoginFormState {
 ```
 
 **Odpowiedzialność**:
+
 - Walidacja formularza po stronie klienta (format email, hasło niepuste)
 - Obsługa zdarzeń user input (onChange, onSubmit)
 - Komunikacja z Supabase Auth API (przez helper function)
@@ -120,6 +132,7 @@ interface LoginFormState {
 - Przekierowanie po udanym logowaniu
 
 **Przepływ logowania**:
+
 1. Użytkownik wypełnia formularz
 2. Walidacja client-side (sprawdzenie formatu email, min długość hasła)
 3. Submit → wywołanie `signInWithPassword` z Supabase Auth
@@ -128,13 +141,12 @@ interface LoginFormState {
    - Błąd: Wyświetlenie komunikatu błędu inline
 
 **Struktura komponentu**:
+
 ```tsx
 <Card className="w-full max-w-md">
   <CardHeader>
     <CardTitle>Logowanie do Fiszki</CardTitle>
-    <CardDescription>
-      Wprowadź swoje dane aby się zalogować
-    </CardDescription>
+    <CardDescription>Wprowadź swoje dane aby się zalogować</CardDescription>
   </CardHeader>
   <CardContent>
     <form onSubmit={handleSubmit}>
@@ -154,12 +166,7 @@ interface LoginFormState {
         required
       />
       {error && <ErrorMessage message={error} />}
-      <Button
-        type="submit"
-        loading={isLoading}
-        disabled={isLoading || !isFormValid}
-        className="w-full"
-      >
+      <Button type="submit" loading={isLoading} disabled={isLoading || !isFormValid} className="w-full">
         Zaloguj się
       </Button>
     </form>
@@ -176,10 +183,12 @@ interface LoginFormState {
 ```
 
 **Walidacja**:
+
 - Email: Regex dla formatu email `^[^\s@]+@[^\s@]+\.[^\s@]+$`
 - Hasło: Min 1 znak (Supabase enforce własne reguły na backendzie)
 
 **Komunikaty błędów**:
+
 - `"invalid_credentials"` → "Nieprawidłowy email lub hasło"
 - `"email_not_confirmed"` → "Potwierdź swój adres email przed logowaniem"
 - `"too_many_requests"` → "Zbyt wiele prób logowania. Spróbuj ponownie później"
@@ -190,6 +199,7 @@ interface LoginFormState {
 **Plik**: `src/pages/register.astro`
 
 **Struktura**:
+
 ```
 <Layout title="Rejestracja">
   <main class="min-h-screen bg-background flex items-center justify-center">
@@ -201,6 +211,7 @@ interface LoginFormState {
 ```
 
 **Server-side logic**:
+
 - Sprawdzenie czy użytkownik jest już zalogowany (redirect do `/generate`)
 - Obsługa query params dla błędów i komunikatów
 
@@ -209,6 +220,7 @@ interface LoginFormState {
 **Plik**: `src/components/auth/RegisterForm.tsx`
 
 **Stan komponentu**:
+
 ```typescript
 interface RegisterFormState {
   email: string;
@@ -225,6 +237,7 @@ interface RegisterFormState {
 ```
 
 **Odpowiedzialność**:
+
 - Walidacja formularza (format email, zgodność haseł, min długość hasła)
 - Real-time walidacja dla pola potwierdzenia hasła
 - Komunikacja z Supabase Auth API (signup)
@@ -232,24 +245,25 @@ interface RegisterFormState {
 - Przekierowanie do `/generate` po sukcesie
 
 **Walidacja**:
+
 - Email: Format email
 - Hasło: Min 8 znaków (wymaganie Supabase domyślne)
 - Potwierdzenie hasła: Musi być identyczne z hasłem
 
 **Komunikaty błędów**:
+
 - `"email_exists"` → "Konto z tym adresem email już istnieje"
 - `"weak_password"` → "Hasło musi mieć co najmniej 8 znaków"
 - `"invalid_email"` → "Wprowadź poprawny adres email"
 - Passwords mismatch → "Hasła nie są identyczne"
 
 **Struktura komponentu**:
+
 ```tsx
 <Card className="w-full max-w-md">
   <CardHeader>
     <CardTitle>Rejestracja</CardTitle>
-    <CardDescription>
-      Utwórz konto aby korzystać z pełnej funkcjonalności
-    </CardDescription>
+    <CardDescription>Utwórz konto aby korzystać z pełnej funkcjonalności</CardDescription>
   </CardHeader>
   <CardContent>
     <form onSubmit={handleSubmit}>
@@ -277,12 +291,7 @@ interface RegisterFormState {
         required
       />
       {error && <ErrorMessage message={error} />}
-      <Button
-        type="submit"
-        loading={isLoading}
-        disabled={isLoading || !isFormValid}
-        className="w-full"
-      >
+      <Button type="submit" loading={isLoading} disabled={isLoading || !isFormValid} className="w-full">
         Zarejestruj się
       </Button>
     </form>
@@ -303,6 +312,7 @@ interface RegisterFormState {
 **Plik**: `src/pages/forgot-password.astro`
 
 **Struktura**:
+
 ```
 <Layout title="Resetowanie hasła">
   <main class="min-h-screen bg-background flex items-center justify-center">
@@ -314,6 +324,7 @@ interface RegisterFormState {
 ```
 
 **Server-side logic**:
+
 - Sprawdzenie czy użytkownik jest już zalogowany (redirect do `/generate`)
 - Obsługa query params dla komunikatów (np. `?success=true`)
 
@@ -322,6 +333,7 @@ interface RegisterFormState {
 **Plik**: `src/components/auth/ForgotPasswordForm.tsx`
 
 **Stan komponentu**:
+
 ```typescript
 interface ForgotPasswordFormState {
   email: string;
@@ -335,19 +347,19 @@ interface ForgotPasswordFormState {
 ```
 
 **Odpowiedzialność**:
+
 - Walidacja formatu email
 - Wywołanie Supabase Auth API (`resetPasswordForEmail`)
 - Wyświetlenie komunikatu sukcesu (nie ujawnianie czy email istnieje w systemie)
 - Link powrotny do logowania
 
 **Struktura komponentu**:
+
 ```tsx
 <Card className="w-full max-w-md">
   <CardHeader>
     <CardTitle>Resetowanie hasła</CardTitle>
-    <CardDescription>
-      Wprowadź adres email powiązany z Twoim kontem
-    </CardDescription>
+    <CardDescription>Wprowadź adres email powiązany z Twoim kontem</CardDescription>
   </CardHeader>
   <CardContent>
     {!success ? (
@@ -361,12 +373,7 @@ interface ForgotPasswordFormState {
           required
         />
         {error && <ErrorMessage message={error} />}
-        <Button
-          type="submit"
-          loading={isLoading}
-          disabled={isLoading || !isFormValid}
-          className="w-full"
-        >
+        <Button type="submit" loading={isLoading} disabled={isLoading || !isFormValid} className="w-full">
           Wyślij link resetujący
         </Button>
       </form>
@@ -375,8 +382,8 @@ interface ForgotPasswordFormState {
         <CheckCircle className="h-4 w-4" />
         <AlertTitle>Email wysłany</AlertTitle>
         <AlertDescription>
-          Jeśli konto z tym adresem istnieje, otrzymasz email z linkiem do
-          resetowania hasła. Link będzie ważny przez 1 godzinę.
+          Jeśli konto z tym adresem istnieje, otrzymasz email z linkiem do resetowania hasła. Link będzie ważny przez 1
+          godzinę.
         </AlertDescription>
       </Alert>
     )}
@@ -393,6 +400,7 @@ interface ForgotPasswordFormState {
 ```
 
 **Przepływ**:
+
 1. Użytkownik wpisuje email
 2. Walidacja formatu email
 3. Submit → wywołanie `supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: 'https://yourdomain.com/reset-password' })`
@@ -400,6 +408,7 @@ interface ForgotPasswordFormState {
 5. Użytkownik otrzymuje email z linkiem zawierającym token
 
 **Komunikaty błędów**:
+
 - Invalid email format → "Wprowadź poprawny adres email"
 - Generic error → "Wystąpił błąd. Spróbuj ponownie"
 
@@ -408,6 +417,7 @@ interface ForgotPasswordFormState {
 **Plik**: `src/pages/reset-password.astro`
 
 **Struktura**:
+
 ```
 <Layout title="Ustaw nowe hasło">
   <main class="min-h-screen bg-background flex items-center justify-center">
@@ -419,11 +429,13 @@ interface ForgotPasswordFormState {
 ```
 
 **Server-side logic**:
+
 - Wyciągnięcie tokenu z URL hash (`#access_token=...&type=recovery`)
 - Przekazanie tokenu do komponentu
 - Sprawdzenie ważności tokenu (Supabase SDK to obsłuży)
 
 **Kod frontmatter**:
+
 ```typescript
 // Supabase przekierowuje do /reset-password#access_token=...&type=recovery
 // Token jest w hash, więc musimy go wyciągnąć client-side
@@ -440,6 +452,7 @@ if (session.data.session) {
 **Plik**: `src/components/auth/ResetPasswordForm.tsx`
 
 **Stan komponentu**:
+
 ```typescript
 interface ResetPasswordFormState {
   password: string;
@@ -455,19 +468,19 @@ interface ResetPasswordFormState {
 ```
 
 **Odpowiedzialność**:
+
 - Walidacja hasła (min 8 znaków)
 - Walidacja zgodności haseł
 - Wywołanie Supabase Auth API (`updateUser`)
 - Redirect do `/login` po sukcesie z komunikatem
 
 **Struktura komponentu**:
+
 ```tsx
 <Card className="w-full max-w-md">
   <CardHeader>
     <CardTitle>Ustaw nowe hasło</CardTitle>
-    <CardDescription>
-      Wprowadź nowe hasło dla swojego konta
-    </CardDescription>
+    <CardDescription>Wprowadź nowe hasło dla swojego konta</CardDescription>
   </CardHeader>
   <CardContent>
     {!success ? (
@@ -488,12 +501,7 @@ interface ResetPasswordFormState {
           required
         />
         {error && <ErrorMessage message={error} />}
-        <Button
-          type="submit"
-          loading={isLoading}
-          disabled={isLoading || !isFormValid}
-          className="w-full"
-        >
+        <Button type="submit" loading={isLoading} disabled={isLoading || !isFormValid} className="w-full">
           Ustaw nowe hasło
         </Button>
       </form>
@@ -501,9 +509,7 @@ interface ResetPasswordFormState {
       <Alert variant="success">
         <CheckCircle className="h-4 w-4" />
         <AlertTitle>Hasło zmienione</AlertTitle>
-        <AlertDescription>
-          Twoje hasło zostało pomyślnie zmienione. Możesz się teraz zalogować.
-        </AlertDescription>
+        <AlertDescription>Twoje hasło zostało pomyślnie zmienione. Możesz się teraz zalogować.</AlertDescription>
       </Alert>
     )}
   </CardContent>
@@ -518,6 +524,7 @@ interface ResetPasswordFormState {
 ```
 
 **Przepływ**:
+
 1. Użytkownik klika link w emailu
 2. Supabase przekierowuje do `/reset-password#access_token=...&type=recovery`
 3. Komponent wywołuje `supabaseClient.auth.getSession()` aby zweryfikować token
@@ -527,10 +534,12 @@ interface ResetPasswordFormState {
 7. Sukces → wyświetlenie komunikatu + redirect do `/login` po 3 sekundach
 
 **Walidacja**:
+
 - Hasło: Min 8 znaków
 - Potwierdzenie hasła: Musi być identyczne z hasłem
 
 **Komunikaty błędów**:
+
 - Token expired → "Link resetujący wygasł. Poproś o nowy link"
 - Invalid token → "Nieprawidłowy link. Poproś o nowy link resetujący"
 - Passwords mismatch → "Hasła nie są identyczne"
@@ -543,6 +552,7 @@ interface ResetPasswordFormState {
 **Plik**: `src/components/Header.tsx`
 
 **Nowy interfejs Props**:
+
 ```typescript
 interface HeaderProps {
   user?: User | null;
@@ -553,37 +563,45 @@ interface HeaderProps {
 **Rozszerzenie funkcjonalności**:
 
 1. **Nawigacja główna** (tylko dla zalogowanych użytkowników):
+
 ```tsx
-{user && (
-  <nav className="flex items-center gap-6">
-    <NavLink href="/generate" active={currentPath === "/generate"}>
-      Generuj
-    </NavLink>
-    <NavLink href="/flashcards" active={currentPath === "/flashcards"}>
-      Moje fiszki
-    </NavLink>
-    <NavLink href="/learn" active={currentPath === "/learn"}>
-      Sesja nauki
-    </NavLink>
-    <NavLink href="/stats" active={currentPath === "/stats"}>
-      Statystyki
-    </NavLink>
-  </nav>
-)}
+{
+  user && (
+    <nav className="flex items-center gap-6">
+      <NavLink href="/generate" active={currentPath === "/generate"}>
+        Generuj
+      </NavLink>
+      <NavLink href="/flashcards" active={currentPath === "/flashcards"}>
+        Moje fiszki
+      </NavLink>
+      <NavLink href="/learn" active={currentPath === "/learn"}>
+        Sesja nauki
+      </NavLink>
+      <NavLink href="/stats" active={currentPath === "/stats"}>
+        Statystyki
+      </NavLink>
+    </nav>
+  );
+}
 ```
 
 2. **User dropdown** (prawy górny róg):
+
 ```tsx
-{user && <UserDropdown user={user} />}
+{
+  user && <UserDropdown user={user} />;
+}
 ```
 
 3. **Mobile menu** (hamburger dla < 768px):
+
 - Rozwijane menu z pełną nawigacją
 - Elementy menu użytkownika zintegrowane w mobile view
 
 **Komponenty pomocnicze**:
 
 **NavLink** (`src/components/navigation/NavLink.tsx`):
+
 ```typescript
 interface NavLinkProps {
   href: string;
@@ -597,6 +615,7 @@ interface NavLinkProps {
 **Plik**: `src/components/navigation/UserDropdown.tsx`
 
 **Props**:
+
 ```typescript
 interface UserDropdownProps {
   user: User;
@@ -604,6 +623,7 @@ interface UserDropdownProps {
 ```
 
 **Struktura**:
+
 ```tsx
 <DropdownMenu>
   <DropdownMenuTrigger asChild>
@@ -618,10 +638,7 @@ interface UserDropdownProps {
       <span className="text-sm text-muted-foreground">{user.email}</span>
     </DropdownMenuItem>
     <DropdownMenuSeparator />
-    <DropdownMenuItem
-      className="text-destructive"
-      onClick={handleDeleteAccount}
-    >
+    <DropdownMenuItem className="text-destructive" onClick={handleDeleteAccount}>
       <Trash2 className="mr-2 h-4 w-4" />
       Usuń konto
     </DropdownMenuItem>
@@ -635,6 +652,7 @@ interface UserDropdownProps {
 ```
 
 **Odpowiedzialność**:
+
 - Wyświetlanie menu użytkownika
 - Obsługa kliknięcia "Wyloguj się" → wywołanie funkcji logout
 - Obsługa kliknięcia "Usuń konto" → otwarcie modal potwierdzenia
@@ -645,6 +663,7 @@ interface UserDropdownProps {
 **Plik**: `src/components/auth/DeleteAccountModal.tsx`
 
 **Props**:
+
 ```typescript
 interface DeleteAccountModalProps {
   isOpen: boolean;
@@ -654,6 +673,7 @@ interface DeleteAccountModalProps {
 ```
 
 **Stan komponentu**:
+
 ```typescript
 interface DeleteAccountModalState {
   isConfirmChecked: boolean;
@@ -663,6 +683,7 @@ interface DeleteAccountModalState {
 ```
 
 **Struktura**:
+
 ```tsx
 <AlertDialog open={isOpen} onOpenChange={onClose}>
   <AlertDialogContent>
@@ -672,17 +693,12 @@ interface DeleteAccountModalState {
         Usunąć konto?
       </AlertDialogTitle>
       <AlertDialogDescription>
-        Ta operacja spowoduje trwałe usunięcie Twojego konta oraz wszystkich
-        fiszek. Nie można tego cofnąć.
+        Ta operacja spowoduje trwałe usunięcie Twojego konta oraz wszystkich fiszek. Nie można tego cofnąć.
       </AlertDialogDescription>
     </AlertDialogHeader>
 
     <div className="flex items-center space-x-2">
-      <Checkbox
-        id="confirm"
-        checked={isConfirmChecked}
-        onCheckedChange={setIsConfirmChecked}
-      />
+      <Checkbox id="confirm" checked={isConfirmChecked} onCheckedChange={setIsConfirmChecked} />
       <label htmlFor="confirm" className="text-sm">
         Rozumiem, że ta operacja jest nieodwracalna
       </label>
@@ -691,9 +707,7 @@ interface DeleteAccountModalState {
     {error && <ErrorMessage message={error} />}
 
     <AlertDialogFooter>
-      <AlertDialogCancel disabled={isDeleting}>
-        Anuluj
-      </AlertDialogCancel>
+      <AlertDialogCancel disabled={isDeleting}>Anuluj</AlertDialogCancel>
       <AlertDialogAction
         disabled={!isConfirmChecked || isDeleting}
         onClick={handleConfirm}
@@ -707,6 +721,7 @@ interface DeleteAccountModalState {
 ```
 
 **Odpowiedzialność**:
+
 - Wyświetlanie modal ostrzeżenia
 - Wymuszenie zaznaczenia checkboxa przed aktywacją przycisku "Usuń konto"
 - Wywołanie API endpoint do usunięcia konta
@@ -718,6 +733,7 @@ interface DeleteAccountModalState {
 **Plik**: `src/pages/generate.astro`
 
 **Rozszerzenie server-side logic**:
+
 ```typescript
 const session = await Astro.locals.supabase.auth.getSession();
 const user = session.data.session?.user || null;
@@ -725,6 +741,7 @@ const isDemoMode = !user;
 ```
 
 **Przekazanie user do komponentu**:
+
 ```tsx
 <GenerationView client:load user={user} isDemoMode={isDemoMode} />
 ```
@@ -732,6 +749,7 @@ const isDemoMode = !user;
 **Modyfikacje komponentu GenerationView** (`src/components/generation/GenerationView.tsx`):
 
 **Nowe Props**:
+
 ```typescript
 interface GenerationViewProps {
   user?: User | null;
@@ -740,6 +758,7 @@ interface GenerationViewProps {
 ```
 
 **Logika dla trybu demo**:
+
 - Jeśli `isDemoMode === true`:
   - Formularz generowania działa normalnie
   - Po otrzymaniu sugestii, wyświetlany jest banner:
@@ -748,8 +767,7 @@ interface GenerationViewProps {
       <InfoCircle className="h-4 w-4" />
       <AlertTitle>TrybDemo</AlertTitle>
       <AlertDescription>
-        Zarejestruj się, aby zapisać wygenerowane fiszki i korzystać z
-        algorytmu powtórek.{" "}
+        Zarejestruj się, aby zapisać wygenerowane fiszki i korzystać z algorytmu powtórek.{" "}
         <a href="/register" className="underline font-medium">
           Zarejestruj się teraz
         </a>
@@ -769,6 +787,7 @@ interface GenerationViewProps {
 **Plik**: `src/components/ui/PasswordInput.tsx`
 
 **Props**:
+
 ```typescript
 interface PasswordInputProps {
   label: string;
@@ -781,6 +800,7 @@ interface PasswordInputProps {
 ```
 
 **Funkcjonalność**:
+
 - Input type="password" z toggle visibility (ikona oka)
 - Pokazanie/ukrycie hasła po kliknięciu ikony
 - Wyświetlanie error message inline
@@ -791,6 +811,7 @@ interface PasswordInputProps {
 **Plik**: `src/components/ui/TextInput.tsx`
 
 Rozszerzenie istniejącego komponentu o:
+
 - `error?: string` - komunikat błędu
 - `helperText?: string` - tekst pomocniczy
 
@@ -804,6 +825,7 @@ Rozszerzenie istniejącego komponentu o:
 **Plik**: `src/pages/api/auth/logout.ts`
 
 **Response**:
+
 ```typescript
 interface LogoutResponse {
   success: boolean;
@@ -811,6 +833,7 @@ interface LogoutResponse {
 ```
 
 **Implementacja**:
+
 ```typescript
 export const POST: APIRoute = async ({ locals, cookies }) => {
   try {
@@ -820,15 +843,9 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
     cookies.delete("sb-access-token", { path: "/" });
     cookies.delete("sb-refresh-token", { path: "/" });
 
-    return new Response(
-      JSON.stringify({ success: true }),
-      { status: 200 }
-    );
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (error) {
-    return new Response(
-      JSON.stringify({ success: false }),
-      { status: 500 }
-    );
+    return new Response(JSON.stringify({ success: false }), { status: 500 });
   }
 };
 ```
@@ -841,6 +858,7 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
 **Wymagania**: Autentykacja (sprawdzenie JWT token)
 
 **Response**:
+
 ```typescript
 interface DeleteAccountResponse {
   success: boolean;
@@ -852,6 +870,7 @@ interface DeleteAccountResponse {
 ```
 
 **Implementacja**:
+
 ```typescript
 export const DELETE: APIRoute = async ({ locals, cookies }) => {
   try {
@@ -872,38 +891,26 @@ export const DELETE: APIRoute = async ({ locals, cookies }) => {
     }
 
     // 1. Usunięcie wszystkich fiszek użytkownika
-    await locals.supabase
-      .from("flashcards")
-      .delete()
-      .eq("user_id", user.id);
+    await locals.supabase.from("flashcards").delete().eq("user_id", user.id);
 
     // 2. Usunięcie wszystkich generacji użytkownika
-    await locals.supabase
-      .from("generations")
-      .delete()
-      .eq("user_id", user.id);
+    await locals.supabase.from("generations").delete().eq("user_id", user.id);
 
     // 3. Usunięcie logów błędów generacji (jeśli istnieją)
-    await locals.supabase
-      .from("generation_error_logs")
-      .delete()
-      .eq("user_id", user.id);
+    await locals.supabase.from("generation_error_logs").delete().eq("user_id", user.id);
 
     // 4. Usunięcie konta użytkownika przez Supabase Admin API
     // Wymaga użycia service role key (nie anon key)
     // To musi być wykonane przez Admin API lub funkcję edge
 
     // Wywołanie Supabase Admin API (wymaga backend function)
-    const deleteUserResponse = await fetch(
-      `${import.meta.env.SUPABASE_URL}/auth/v1/admin/users/${user.id}`,
-      {
-        method: "DELETE",
-        headers: {
-          apikey: import.meta.env.SUPABASE_SERVICE_ROLE_KEY,
-          Authorization: `Bearer ${import.meta.env.SUPABASE_SERVICE_ROLE_KEY}`,
-        },
-      }
-    );
+    const deleteUserResponse = await fetch(`${import.meta.env.SUPABASE_URL}/auth/v1/admin/users/${user.id}`, {
+      method: "DELETE",
+      headers: {
+        apikey: import.meta.env.SUPABASE_SERVICE_ROLE_KEY,
+        Authorization: `Bearer ${import.meta.env.SUPABASE_SERVICE_ROLE_KEY}`,
+      },
+    });
 
     if (!deleteUserResponse.ok) {
       throw new Error("Failed to delete user account");
@@ -914,10 +921,7 @@ export const DELETE: APIRoute = async ({ locals, cookies }) => {
     cookies.delete("sb-access-token", { path: "/" });
     cookies.delete("sb-refresh-token", { path: "/" });
 
-    return new Response(
-      JSON.stringify({ success: true }),
-      { status: 200 }
-    );
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (error) {
     console.error("Delete account error:", error);
     return new Response(
@@ -935,6 +939,7 @@ export const DELETE: APIRoute = async ({ locals, cookies }) => {
 ```
 
 **Uwaga**: Usuwanie użytkownika przez Supabase Admin API wymaga **Service Role Key** (nie Anon Key). Należy dodać do `.env`:
+
 ```
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 ```
@@ -944,6 +949,7 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 **Uwaga**: Funkcjonalność resetowania hasła jest w pełni obsługiwana przez Supabase Auth bezpośrednio z komponentów React. Nie ma potrzeby tworzenia własnych endpointów API. Komponenty używają:
 
 1. **Forgot Password Flow**:
+
 ```typescript
 // W ForgotPasswordForm.tsx
 await supabaseClient.auth.resetPasswordForEmail(email, {
@@ -952,11 +958,13 @@ await supabaseClient.auth.resetPasswordForEmail(email, {
 ```
 
 Supabase:
+
 - Wysyła email z linkiem resetującym
 - Link zawiera token recovery w URL hash
 - Link jest ważny przez 1 godzinę (domyślnie)
 
 2. **Reset Password Flow**:
+
 ```typescript
 // W ResetPasswordForm.tsx
 // Supabase automatycznie wykrywa token z URL hash (#access_token=...&type=recovery)
@@ -978,6 +986,7 @@ W Supabase Dashboard → Authentication → Email Templates należy skonfigurowa
 
 **Konfiguracja Redirect URL**:
 W Supabase Dashboard → Authentication → URL Configuration dodaj:
+
 - `http://localhost:4321/reset-password` (dev)
 - `https://yourdomain.com/reset-password` (production)
 
@@ -1012,10 +1021,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
       user = data.user;
     } else if (refreshToken) {
       // Token wygasł, próba odświeżenia
-      const { data: refreshData, error: refreshError } =
-        await supabaseClient.auth.refreshSession({
-          refresh_token: refreshToken,
-        });
+      const { data: refreshData, error: refreshError } = await supabaseClient.auth.refreshSession({
+        refresh_token: refreshToken,
+      });
 
       if (!refreshError && refreshData.session) {
         user = refreshData.user;
@@ -1057,6 +1065,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
 ```
 
 **Aktualizacja typu `App.Locals`** w `src/env.d.ts`:
+
 ```typescript
 interface Locals {
   supabase: SupabaseClient<Database>;
@@ -1164,9 +1173,7 @@ export async function registerUser(
 /**
  * Client-side logout function
  */
-export async function logoutUser(
-  supabase: SupabaseClient
-): Promise<{ success: boolean }> {
+export async function logoutUser(supabase: SupabaseClient): Promise<{ success: boolean }> {
   await supabase.auth.signOut();
   return { success: true };
 }
@@ -1278,13 +1285,8 @@ import { z } from "zod";
  * Schema walidacji dla logowania
  */
 export const loginSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email jest wymagany")
-    .email("Wprowadź poprawny adres email"),
-  password: z
-    .string()
-    .min(1, "Hasło jest wymagane"),
+  email: z.string().min(1, "Email jest wymagany").email("Wprowadź poprawny adres email"),
+  password: z.string().min(1, "Hasło jest wymagane"),
 });
 
 /**
@@ -1292,13 +1294,8 @@ export const loginSchema = z.object({
  */
 export const registerSchema = z
   .object({
-    email: z
-      .string()
-      .min(1, "Email jest wymagany")
-      .email("Wprowadź poprawny adres email"),
-    password: z
-      .string()
-      .min(8, "Hasło musi mieć co najmniej 8 znaków"),
+    email: z.string().min(1, "Email jest wymagany").email("Wprowadź poprawny adres email"),
+    password: z.string().min(8, "Hasło musi mieć co najmniej 8 znaków"),
     passwordConfirm: z.string(),
   })
   .refine((data) => data.password === data.passwordConfirm, {
@@ -1359,10 +1356,7 @@ export function validateRegisterInput(input: unknown): {
  * Schema walidacji dla forgot password
  */
 export const forgotPasswordSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email jest wymagany")
-    .email("Wprowadź poprawny adres email"),
+  email: z.string().min(1, "Email jest wymagany").email("Wprowadź poprawny adres email"),
 });
 
 /**
@@ -1370,9 +1364,7 @@ export const forgotPasswordSchema = z.object({
  */
 export const resetPasswordSchema = z
   .object({
-    password: z
-      .string()
-      .min(8, "Hasło musi mieć co najmniej 8 znaków"),
+    password: z.string().min(8, "Hasło musi mieć co najmniej 8 znaków"),
     passwordConfirm: z.string(),
   })
   .refine((data) => data.password === data.passwordConfirm, {
@@ -1436,6 +1428,7 @@ export function validateResetPasswordInput(input: unknown): {
 ### 3.5 Obsługa błędów
 
 **Standardowy format odpowiedzi błędów**:
+
 ```typescript
 interface ErrorResponse {
   error: {
@@ -1447,6 +1440,7 @@ interface ErrorResponse {
 ```
 
 **Kody błędów**:
+
 - `UNAUTHORIZED` - Brak autoryzacji (401)
 - `FORBIDDEN` - Brak uprawnień (403)
 - `VALIDATION_ERROR` - Błąd walidacji danych (400)
@@ -1455,6 +1449,7 @@ interface ErrorResponse {
 - `RATE_LIMIT_EXCEEDED` - Przekroczono limit żądań (429)
 
 **Handler błędów** (`src/lib/error-handler.ts`) - rozszerzenie istniejącego:
+
 ```typescript
 export function handleAuthError(error: unknown): Response {
   if (error instanceof z.ZodError) {
@@ -1487,6 +1482,7 @@ export function handleAuthError(error: unknown): Response {
 ### 4.1 Konfiguracja Supabase Auth
 
 **Wymagane zmienne środowiskowe** (`.env`):
+
 ```
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_KEY=your-anon-key
@@ -1494,6 +1490,7 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ```
 
 **Aktualizacja `src/env.d.ts`**:
+
 ```typescript
 interface ImportMetaEnv {
   readonly SUPABASE_URL: string;
@@ -1515,30 +1512,22 @@ const supabaseUrl = import.meta.env.SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.SUPABASE_KEY;
 
 // Client-side Supabase client (używa anon key)
-export const supabaseClient = createClient<Database>(
-  supabaseUrl,
-  supabaseAnonKey,
-  {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true,
-    },
-  }
-);
+export const supabaseClient = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true,
+  },
+});
 
 // Server-side admin client (używa service role key)
 // Tylko dla operacji administracyjnych (np. usuwanie użytkownika)
-export const supabaseAdmin = createClient<Database>(
-  supabaseUrl,
-  import.meta.env.SUPABASE_SERVICE_ROLE_KEY,
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  }
-);
+export const supabaseAdmin = createClient<Database>(supabaseUrl, import.meta.env.SUPABASE_SERVICE_ROLE_KEY, {
+  auth: {
+    autoRefreshToken: false,
+    persistSession: false,
+  },
+});
 
 export type SupabaseClient = SupabaseClientBase<Database>;
 ```
@@ -1676,13 +1665,13 @@ const { data: flashcards, error } = await Astro.locals.supabase
   <main class="min-h-screen bg-background py-8">
     <div class="container">
       <h1 class="text-3xl font-bold mb-8">Moje fiszki</h1>
-      {error ? (
-        <div class="text-destructive">
-          Wystąpił błąd podczas ładowania fiszek
-        </div>
-      ) : (
-        <FlashcardList client:load initialFlashcards={flashcards} user={user} />
-      )}
+      {
+        error ? (
+          <div class="text-destructive">Wystąpił błąd podczas ładowania fiszek</div>
+        ) : (
+          <FlashcardList client:load initialFlashcards={flashcards} user={user} />
+        )
+      }
     </div>
   </main>
 </Layout>
@@ -1827,6 +1816,7 @@ CREATE POLICY "Users can insert their own generations"
 ```
 
 2. **Włączenie RLS**:
+
 ```sql
 ALTER TABLE flashcards ENABLE ROW LEVEL SECURITY;
 ALTER TABLE generations ENABLE ROW LEVEL SECURITY;
@@ -1834,6 +1824,7 @@ ALTER TABLE generation_error_logs ENABLE ROW LEVEL SECURITY;
 ```
 
 3. **Foreign Key do auth.users**:
+
 ```sql
 ALTER TABLE flashcards
 ADD CONSTRAINT flashcards_user_id_fkey
@@ -1851,6 +1842,7 @@ ON DELETE CASCADE;
 ## 7. Checklist implementacji
 
 ### Frontend (MVP)
+
 - [ ] Utworzenie strony `/login` (Astro)
 - [ ] Utworzenie komponentu `LoginForm` (React)
 - [ ] Utworzenie strony `/register` (Astro)
@@ -1863,6 +1855,7 @@ ON DELETE CASCADE;
 - [ ] Modyfikacja `GenerationView` o tryb demo
 
 ### Frontend (Opcjonalne - poza MVP)
+
 - [ ] Utworzenie strony `/forgot-password` (Astro)
 - [ ] Utworzenie komponentu `ForgotPasswordForm` (React)
 - [ ] Utworzenie strony `/reset-password` (Astro)
@@ -1870,6 +1863,7 @@ ON DELETE CASCADE;
 - [ ] Utworzenie strony `/settings` z opcją zmiany hasła
 
 ### Backend (MVP)
+
 - [ ] Rozszerzenie middleware o autentykację i autoryzację (PUBLIC_ROUTES: /login, /register)
 - [ ] Utworzenie `/api/auth/logout` endpoint
 - [ ] Utworzenie `/api/auth/account` (DELETE) endpoint
@@ -1881,10 +1875,12 @@ ON DELETE CASCADE;
 - [ ] Aktualizacja `supabase.client.ts` (dodanie `supabaseAdmin`)
 
 ### Backend (Opcjonalne - poza MVP)
+
 - [ ] Rozszerzenie helper functions o forgot/reset password
 - [ ] Rozszerzenie validation schemas o forgot/reset password
 
 ### Database (MVP)
+
 - [ ] Utworzenie RLS policies dla `flashcards`
 - [ ] Utworzenie RLS policies dla `generations`
 - [ ] Utworzenie RLS policies dla `generation_error_logs`
@@ -1894,12 +1890,14 @@ ON DELETE CASCADE;
 - [ ] Konfiguracja Site URL w Supabase Dashboard (bez redirect URLs dla email confirmation)
 
 ### Environment
+
 - [ ] Dodanie `SUPABASE_SERVICE_ROLE_KEY` do `.env`
 - [ ] Aktualizacja `ImportMetaEnv` w `src/env.d.ts`
 - [ ] Dodanie `.env.example` z nowymi zmiennymi
 - [ ] Weryfikacja konfiguracji CORS w Supabase
 
 ### Testing
+
 - [ ] Testy rejestracji (sukces, błędy walidacji, duplikat email)
 - [ ] Testy logowania (sukces, błędne credentials)
 - [ ] Testy wylogowania

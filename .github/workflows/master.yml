@@ -44,7 +44,7 @@ jobs:
       - name: Setup Node and install dependencies
         uses: ./.github/actions/setup-node-deps
         with:
-          install-playwright: 'true'
+          install-playwright: "true"
 
       - name: Run E2E tests
         run: npm run test:e2e

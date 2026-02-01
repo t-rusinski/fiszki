@@ -5,12 +5,14 @@
 ### Stan aktualny aplikacji
 
 #### Istniejące strony Astro:
+
 - `src/pages/index.astro` - Strona główna
 - `src/pages/generate.astro` - Widok generowania fiszek
 - `src/pages/flashcards.astro` - Lista fiszek użytkownika
 - `src/pages/users.astro` - Zarządzanie użytkownikami
 
 #### Istniejące komponenty React:
+
 - **Header.tsx** - Nagłówek z przełącznikiem motywu (wymaga rozszerzenia o nawigację i menu użytkownika)
 - **GenerationView.tsx** - Główny widok generowania (wymaga modyfikacji dla obsługi trybu demo)
 - **GenerationForm.tsx** - Formularz generowania fiszek
@@ -22,24 +24,29 @@
 - **UsersList.tsx** - Lista użytkowników w systemie
 
 #### Komponenty UI (Shadcn):
+
 - Button
 - Card
 - Avatar
 
 #### Middleware:
+
 - `src/middleware/index.ts` - Obecnie tylko przypisuje supabaseClient do locals (wymaga rozszerzenia)
 
 ### Nowe elementy do wdrożenia
 
 #### Nowe strony Astro (MVP):
+
 1. **`/login`** - Strona logowania z server-side sprawdzeniem sesji
 2. **`/register`** - Strona rejestracji z server-side sprawdzeniem sesji
 
 #### Nowe strony Astro (opcjonalne - poza MVP):
+
 3. **`/forgot-password`** - Resetowanie hasła (żądanie emaila)
 4. **`/reset-password`** - Ustawianie nowego hasła (z tokenu)
 
 #### Nowe komponenty React (MVP):
+
 1. **LoginForm** - Formularz logowania (email + hasło, walidacja, obsługa błędów)
 2. **RegisterForm** - Formularz rejestracji (email + hasło + potwierdź hasło)
 3. **PasswordInput** - Input z możliwością pokazania/ukrycia hasła
@@ -48,10 +55,12 @@
 6. **NavLink** - Link nawigacyjny z aktywnym stanem
 
 #### Nowe komponenty React (opcjonalne - poza MVP):
+
 7. **ForgotPasswordForm** - Formularz żądania resetu hasła
 8. **ResetPasswordForm** - Formularz ustawiania nowego hasła
 
 #### Aktualizacje istniejących komponentów:
+
 1. **Header.tsx** - Rozszerzenie o:
    - Nawigację główną (Generuj, Moje fiszki, Sesja nauki, Statystyki)
    - UserDropdown z menu użytkownika
@@ -63,10 +72,12 @@
    - Warunkowe wyświetlanie przycisków zapisu (ukryte w trybie demo)
 
 #### Nowe endpointy API:
+
 1. **`POST /api/auth/logout`** - Endpoint wylogowania (czyszczenie cookies)
 2. **`DELETE /api/auth/account`** - Endpoint usuwania konta (cascade delete fiszek i generacji)
 
 #### Middleware - rozszerzenie:
+
 - Sprawdzanie sesji użytkownika z Supabase Auth
 - Ochrona tras (redirect niezalogowanych do `/login`)
 - Redirect zalogowanych użytkowników z `/login`, `/register` do `/generate`
@@ -74,6 +85,7 @@
 - Zachowanie `returnUrl` dla przekierowań
 
 #### Helper functions i utilities (nowe):
+
 1. **`src/lib/auth/auth-helpers.ts`** - Funkcje pomocnicze:
    - `mapAuthError()` - Mapowanie błędów Supabase na polski
    - `validateEmail()` - Walidacja formatu email
@@ -98,6 +110,7 @@
 ### Przepływy danych
 
 #### Flow rejestracji (MVP):
+
 1. User → `/register` (Astro page) - server-side sprawdzenie czy już zalogowany
 2. `RegisterForm` (React) → walidacja client-side (format email, min 8 znaków, zgodność haseł)
 3. Submit → `registerUser()` helper → `supabaseClient.auth.signUp()`
@@ -107,6 +120,7 @@
 7. Redirect do `/generate`
 
 #### Flow logowania (MVP):
+
 1. User → `/login` (Astro page) - server-side sprawdzenie czy już zalogowany
 2. `LoginForm` (React) → walidacja client-side (format email, hasło niepuste)
 3. Submit → `loginUser()` helper → `supabaseClient.auth.signInWithPassword()`
@@ -115,6 +129,7 @@
 6. Redirect do `/generate` lub `returnUrl` (jeśli był przekierowany z chronionej strony)
 
 #### Flow wylogowania (MVP):
+
 1. User → klik "Wyloguj się" w `UserDropdown`
 2. `UserDropdown` → wywołanie `logoutUser()` helper
 3. `supabaseClient.auth.signOut()` → usunięcie session z localStorage
@@ -122,6 +137,7 @@
 5. Redirect do `/login`
 
 #### Flow usuwania konta (MVP):
+
 1. User → klik "Usuń konto" w `UserDropdown`
 2. Otwarcie `DeleteAccountModal` → wyświetlenie ostrzeżenia
 3. User → zaznaczenie checkbox "Rozumiem, że ta operacja jest nieodwracalna"
@@ -135,6 +151,7 @@
 7. Redirect do `/login` z komunikatem o sukcesie
 
 #### Flow generowania - tryb demo vs zalogowany (MVP):
+
 1. User → `/generate` (dostępne dla wszystkich użytkowników)
 2. Middleware → sprawdzenie sesji użytkownika z Supabase Auth
 3. Astro page → przekazanie `user` i `isDemoMode` do `GenerationView`:
@@ -151,6 +168,7 @@
      - Możliwość akceptacji, edycji i zapisu fiszek
 
 #### Flow ochrony tras (Middleware):
+
 1. User → próba wejścia na chronioną stronę (np. `/flashcards`)
 2. Middleware → sprawdzenie sesji:
    - `accessToken` z cookies
@@ -160,6 +178,7 @@
 5. Strona renderowana z dostępem do danych użytkownika
 
 #### Flow odświeżania tokenu:
+
 1. User → wykonuje akcję wymagającą autentykacji
 2. Middleware → sprawdzenie `accessToken` z cookies
 3. Token wygasły → wywołanie `supabaseClient.auth.refreshSession({ refresh_token })`
@@ -170,6 +189,7 @@
 ### Grupowanie komponentów
 
 #### Moduł Autentykacji (NOWY):
+
 - **LoginForm** - Formularz logowania z walidacją
 - **RegisterForm** - Formularz rejestracji z potwierdzeniem hasła
 - **PasswordInput** - Input z przełącznikiem widoczności hasła
@@ -178,11 +198,13 @@
 - **(Opcjonalnie) ResetPasswordForm** - Formularz nowego hasła
 
 #### Moduł Nawigacji (NOWY/ROZSZERZONY):
+
 - **Header** - Rozszerzony o nawigację i menu użytkownika
 - **NavLink** - Link z aktywnym stanem dla nawigacji
 - **UserDropdown** - Menu użytkownika z avatarem
 
 #### Moduł Generowania (ISTNIEJĄCY, Z AKTUALIZACJĄ):
+
 - **GenerationView** - Zaktualizowany o tryb demo
 - **GenerationForm** - Formularz generowania (bez zmian)
 - **SuggestionsList** - Lista sugestii (bez zmian)
@@ -191,12 +213,15 @@
 - **LoadingState** - Stan ładowania (bez zmian)
 
 #### Moduł Fiszek (ISTNIEJĄCY):
+
 - **FlashcardList** - Lista fiszek użytkownika (bez zmian)
 
 #### Moduł Użytkowników (ISTNIEJĄCY):
+
 - **UsersList** - Lista użytkowników (bez zmian)
 
 #### Komponenty UI (Shadcn):
+
 - **Button** - Przyciski (istniejący)
 - **Card** - Karty (istniejący)
 - **Avatar** - Avatar (istniejący)
@@ -402,6 +427,7 @@ flowchart TD
 ## Kluczowe punkty implementacji
 
 ### MVP (Must Have):
+
 1. Strony `/login` i `/register` z formularzami
 2. Rozszerzenie `Header` o nawigację i `UserDropdown`
 3. Utworzenie komponentów autentykacji: `LoginForm`, `RegisterForm`, `PasswordInput`, `DeleteAccountModal`
@@ -412,22 +438,26 @@ flowchart TD
 8. Instalacja nowych komponentów Shadcn: Input, Alert, AlertDialog, DropdownMenu, Checkbox
 
 ### Opcjonalne (Nice to Have - poza MVP):
+
 1. Strony `/forgot-password` i `/reset-password`
 2. Komponenty `ForgotPasswordForm` i `ResetPasswordForm`
 3. Funkcje reset hasła w `auth-helpers.ts`
 4. Email templates w Supabase Dashboard
 
 ### Database (RLS Policies):
+
 1. Włączenie Row Level Security na tabelach `flashcards`, `generations`, `generation_error_logs`
 2. Utworzenie policies dla SELECT, INSERT, UPDATE, DELETE (tylko własne dane)
 3. Foreign keys z `user_id` do `auth.users` z `ON DELETE CASCADE`
 
 ### Environment Variables:
+
 - `SUPABASE_URL` - URL projektu Supabase
 - `SUPABASE_KEY` - Anon key (public)
 - `SUPABASE_SERVICE_ROLE_KEY` - Service role key (private, do usuwania użytkowników)
 
 ### Konfiguracja Supabase Auth:
+
 - Email provider: Enabled
 - Confirm email: **WYŁĄCZONE dla MVP** (natychmiastowa aktywacja konta)
 - Minimum password length: 8 znaków

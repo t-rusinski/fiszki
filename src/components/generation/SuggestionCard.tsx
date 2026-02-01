@@ -74,6 +74,7 @@ export function SuggestionCard({ suggestion, isChecked, onCheck, onEdit, onRejec
       data-testid="suggestion-card"
     >
       {isEditing ? (
+        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         <div className="space-y-4" onKeyDown={handleKeyDown} data-testid="edit-mode">
           {/* Front Edit */}
           <div className="space-y-1">
@@ -93,7 +94,6 @@ export function SuggestionCard({ suggestion, isChecked, onCheck, onEdit, onRejec
               )}
               aria-describedby="front-counter front-error"
               aria-invalid={frontError ? "true" : "false"}
-              autoFocus
             />
             <div className="flex justify-between items-center">
               <span

@@ -21,6 +21,7 @@ describe("fetchAvailableModels", () => {
   let fetchMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
@@ -170,6 +171,7 @@ describe("isModelAvailable", () => {
   let fetchMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     vi.spyOn(console, "error").mockImplementation(() => {});
     fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
@@ -259,6 +261,7 @@ describe("getFreeModels", () => {
   let fetchMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     vi.spyOn(console, "error").mockImplementation(() => {});
     fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
@@ -395,6 +398,7 @@ describe("checkMultipleModels", () => {
   let fetchMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     vi.spyOn(console, "error").mockImplementation(() => {});
     fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);

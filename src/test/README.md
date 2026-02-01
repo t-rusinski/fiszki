@@ -41,5 +41,5 @@ src/test/
 Import from `@/test/test-utils` instead of `@testing-library/react` directly:
 
 ```typescript
-import { renderWithProviders, screen, fireEvent } from '@/test/test-utils';
+import { renderWithProviders, screen, fireEvent } from "@/test/test-utils";
 ```

@@ -11,10 +11,12 @@ Kompletna struktura Page Object Model została zaimplementowana, zwalidowana i j
 ### 1. **Struktura Page Object Model**
 
 #### Klasy bazowe
+
 - ✅ `BaseComponent.ts` - Bazowa klasa dla wszystkich komponentów
 - ✅ `BasePage.ts` - Bazowa klasa dla wszystkich stron
 
 #### Komponenty (6 klas)
+
 - ✅ `GenerationFormComponent.ts` - Formularz generowania (7 atrybutów testid, 15 metod)
 - ✅ `LoadingStateComponent.ts` - Stan ładowania (3 atrybuty testid, 7 metod)
 - ✅ `SuggestionCardComponent.ts` - Karta fiszki (12 atrybutów testid, 20 metod)
@@ -22,6 +24,7 @@ Kompletna struktura Page Object Model została zaimplementowana, zwalidowana i j
 - ✅ `BulkActionsComponent.ts` - Akcje zbiorcze (3 atrybuty testid, 12 metod)
 
 #### Strony główne
+
 - ✅ `GenerationPage.ts` - Główna strona testowa (agreguje wszystkie komponenty)
 
 ### 2. **Atrybuty data-testid**
@@ -29,12 +32,14 @@ Kompletna struktura Page Object Model została zaimplementowana, zwalidowana i j
 Dodano **31 atrybutów data-testid** w 6 komponentach:
 
 #### GenerationView.tsx (4 atrybuty)
+
 - `success-message` - Komunikat sukcesu
 - `error-message` - Kontener błędu
 - `error-message-text` - Tekst błędu
 - `error-message-close` - Przycisk zamykania błędu
 
 #### GenerationForm.tsx (7 atrybutów)
+
 - `model-select` - Dropdown modelu AI
 - `source-text-input` - Textarea tekstu źródłowego
 - `char-counter` - Licznik znaków
@@ -44,11 +49,13 @@ Dodano **31 atrybutów data-testid** w 6 komponentach:
 - `clear-button` - Przycisk czyszczenia
 
 #### LoadingState.tsx (3 atrybuty)
+
 - `loading-state` - Kontener ładowania
 - `loading-message` - Komunikat ładowania
 - `cancel-generation-button` - Przycisk anulowania
 
 #### SuggestionCard.tsx (12 atrybutów)
+
 - `suggestion-card` - Kontener karty
 - `view-mode` / `edit-mode` - Tryby widoku
 - `flashcard-checkbox` - Checkbox zaznaczania
@@ -59,10 +66,12 @@ Dodano **31 atrybutów data-testid** w 6 komponentach:
 - `edited-badge` - Badge edytowanej fiszki
 
 #### SuggestionsList.tsx (2 atrybuty)
+
 - `suggestions-list` - Kontener listy
 - `suggestions-grid` - Grid z kartami
 
 #### BulkActions.tsx (3 atrybuty)
+
 - `bulk-actions` - Kontener akcji
 - `selection-counter` - Licznik zaznaczonych
 - `save-all-button` / `save-selected-button` - Przyciski zapisu
@@ -70,37 +79,46 @@ Dodano **31 atrybutów data-testid** w 6 komponentach:
 ### 3. **Testy E2E (20 testów)**
 
 #### Happy Path (2 testy)
+
 - ✅ Pełny flow: generowanie → zaznaczanie → zapisywanie
 - ✅ Zapisywanie wszystkich fiszek bez zaznaczania
 
 #### Form Validation (3 testy)
+
 - ✅ Walidacja tekstu za krótkiego (<1000 znaków)
 - ✅ Walidacja tekstu za długiego (>10000 znaków)
 - ✅ Czyszczenie formularza przyciskiem "Wyczyść"
 
 #### Flashcard Editing (3 testy)
+
 - ✅ Edycja fiszki i automatyczne zaznaczenie
 - ✅ Anulowanie edycji przyciskiem
 - ✅ Anulowanie edycji klawiszem Escape
 
 #### Flashcard Operations (3 testy)
+
 - ✅ Odrzucanie fiszki
 - ✅ Zaznaczanie i odznaczanie checkboxów
 - ✅ Disabled state przycisku gdy nic nie zaznaczone
 
 #### Model Selection (1 test)
+
 - ✅ Zmiana modelu AI z dropdown
 
 #### Keyboard Shortcuts (1 test)
+
 - ✅ Wysyłanie formularza Ctrl+Enter
 
 #### Success Message (1 test)
+
 - ✅ Wyświetlanie i auto-hide po 5 sekundach
 
 #### Error Handling (1 test)
+
 - ✅ Zamykanie komunikatu błędu
 
 #### Bulk Actions (2 testy)
+
 - ✅ Aktualizacja licznika zaznaczonych fiszek
 - ✅ Stan "Zapisywanie..." podczas operacji
 
@@ -121,18 +139,21 @@ Dodano **31 atrybutów data-testid** w 6 komponentach:
 ## ✅ Walidacja kodu
 
 ### TypeScript
+
 ```bash
 ✅ npx tsc --noEmit e2e/**/*.ts
 # Brak błędów TypeScript w plikach E2E
 ```
 
 ### Playwright
+
 ```bash
 ✅ npx playwright test --list
 # Wykryto 20 testów w 2 plikach
 ```
 
 ### Build
+
 ```bash
 ✅ npm run build
 # Aplikacja kompiluje się bez błędów
@@ -179,6 +200,7 @@ npm run test:e2e:ui
 ```
 
 Tryb UI pozwala:
+
 - Uruchamiać testy pojedynczo
 - Oglądać wykonywanie na żywo
 - Debugować krok po kroku
@@ -214,10 +236,10 @@ npx playwright test --grep "Flashcard Editing"
 ### Prosty test
 
 ```typescript
-import { test } from '@playwright/test';
-import { GenerationPage } from './pages/GenerationPage';
+import { test } from "@playwright/test";
+import { GenerationPage } from "./pages/GenerationPage";
 
-test('should generate flashcards', async ({ page }) => {
+test("should generate flashcards", async ({ page }) => {
   const genPage = new GenerationPage(page);
 
   await genPage.navigate();
@@ -231,7 +253,7 @@ test('should generate flashcards', async ({ page }) => {
 ### Test z helper methods
 
 ```typescript
-test('should save flashcards', async ({ page }) => {
+test("should save flashcards", async ({ page }) => {
   const genPage = new GenerationPage(page);
 
   // Helper method - jeden call zamiast wielu kroków
@@ -241,14 +263,14 @@ test('should save flashcards', async ({ page }) => {
   await genPage.completeSaveSelectedFlow([0, 1, 2]);
 
   // Verify
-  await genPage.verifySuccessMessage('3 fiszki zostały zapisane');
+  await genPage.verifySuccessMessage("3 fiszki zostały zapisane");
 });
 ```
 
 ### Test operacji na kartach
 
 ```typescript
-test('should edit flashcard', async ({ page }) => {
+test("should edit flashcard", async ({ page }) => {
   const genPage = new GenerationPage(page);
   await genPage.completeGenerationFlow(validText);
 
@@ -256,7 +278,7 @@ test('should edit flashcard', async ({ page }) => {
   const firstCard = genPage.suggestions.getFirstCard();
 
   // Edytuj
-  await firstCard.editFlashcard('New Front', 'New Back');
+  await firstCard.editFlashcard("New Front", "New Back");
 
   // Weryfikuj
   await firstCard.verifyEditedBadge();
@@ -288,6 +310,7 @@ npx playwright codegen http://localhost:4321/generate
 ```
 
 Codegen automatycznie:
+
 - Nagrywa Twoje akcje
 - Generuje kod testu
 - Używa data-testid automatycznie
@@ -295,6 +318,7 @@ Codegen automatycznie:
 ### Screenshots i videos
 
 Konfiguracja automatyczna (playwright.config.ts):
+
 - Screenshot przy niepowodzeniu testu
 - Video przy niepowodzeniu testu
 - Trace przy retry
@@ -329,20 +353,23 @@ e2e/
 ## 🎯 Zalety implementacji
 
 ### 1. **Maintainability**
+
 - Zmiana w UI wymaga aktualizacji tylko w jednym miejscu
 - Centralne zarządzanie locatorami
 - Łatwe dodawanie nowych testów
 
 ### 2. **Reusability**
+
 - Komponenty używane w wielu testach
 - Helper methods dla common flows
 - Wspólna logika w klasach bazowych
 
 ### 3. **Readability**
+
 ```typescript
 // Zamiast:
-await page.getByTestId('source-text-input').fill(text);
-await page.getByTestId('generate-button').click();
+await page.getByTestId("source-text-input").fill(text);
+await page.getByTestId("generate-button").click();
 
 // Piszemy:
 await genPage.form.fillSourceText(text);
@@ -350,11 +377,13 @@ await genPage.form.clickGenerate();
 ```
 
 ### 4. **Type Safety**
+
 - TypeScript zapewnia autocomplete
 - Błędy wykrywane podczas pisania
 - Refactoring jest bezpieczny
 
 ### 5. **Testability**
+
 - 31 unique data-testid selektorów
 - Stabilne locatory (nie css classes)
 - Resilient do zmian stylów
@@ -396,6 +425,7 @@ await genPage.form.clickGenerate();
 **Problem:** `npm run test:e2e` kończy się timeoutem przy uruchomieniu webServer.
 
 **Rozwiązanie:**
+
 1. Uruchom serwer ręcznie: `npm run dev`
 2. W drugim terminalu: `npx playwright test`
 

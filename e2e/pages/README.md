@@ -44,14 +44,18 @@ BaseComponent
 ## Core Classes
 
 ### BasePage
+
 Base class for all page objects. Provides common page-level functionality:
+
 - Navigation (`goto()`)
 - Page title access
 - Wait for page load
 - Screenshot capture
 
 ### BaseComponent
+
 Base class for all component objects. Provides common component-level functionality:
+
 - Visibility checks
 - Wait for visible/hidden
 - Root locator access
@@ -59,15 +63,18 @@ Base class for all component objects. Provides common component-level functional
 ## Page Objects
 
 ### GenerationPage
+
 Main page for AI-powered flashcard generation.
 
 **Components:**
+
 - `form: GenerationFormComponent` - Form for text input and model selection
 - `loading: LoadingStateComponent` - Loading state display
 - `suggestions: SuggestionsListComponent` - List of flashcard suggestions
 - `bulkActions: BulkActionsComponent` - Bulk operation controls
 
 **Example Usage:**
+
 ```typescript
 const generationPage = new GenerationPage(page);
 await generationPage.navigate();
@@ -81,9 +88,11 @@ await generationPage.bulkActions.clickSaveSelected();
 ## Component Objects
 
 ### GenerationFormComponent
+
 Handles the flashcard generation form.
 
 **Key Methods:**
+
 - `selectModel(modelValue: string)` - Select AI model
 - `fillSourceText(text: string)` - Fill source text
 - `clickGenerate()` - Submit form
@@ -92,32 +101,38 @@ Handles the flashcard generation form.
 - `fillAndSubmit(text, model?)` - Helper for complete flow
 
 **Example:**
+
 ```typescript
 await generationPage.form.fillSourceText(validText);
-await generationPage.form.verifyValidationMessage('Długość tekstu OK');
+await generationPage.form.verifyValidationMessage("Długość tekstu OK");
 await generationPage.form.clickGenerate();
 ```
 
 ### LoadingStateComponent
+
 Manages loading state interactions.
 
 **Key Methods:**
+
 - `waitForLoading()` - Wait for loading to appear
 - `waitForLoadingComplete()` - Wait for loading to finish
 - `verifyLoadingVisible()` - Assert loading is visible
 - `clickCancel()` - Cancel operation (if available)
 
 **Example:**
+
 ```typescript
 await generationPage.loading.waitForLoading();
-await generationPage.loading.verifyLoadingMessage('Generowanie fiszek w toku...');
+await generationPage.loading.verifyLoadingMessage("Generowanie fiszek w toku...");
 await generationPage.loading.waitForLoadingComplete();
 ```
 
 ### SuggestionsListComponent
+
 Manages the list of flashcard suggestions.
 
 **Key Methods:**
+
 - `getCard(index: number)` - Get specific card
 - `getFirstCard()` - Get first card
 - `getCardCount()` - Get total number of cards
@@ -127,6 +142,7 @@ Manages the list of flashcard suggestions.
 - `editCard(index, front, back)` - Edit specific card
 
 **Example:**
+
 ```typescript
 const cardCount = await generationPage.suggestions.getCardCount();
 await generationPage.suggestions.checkCards([0, 1, 2]);
@@ -134,9 +150,11 @@ await generationPage.suggestions.verifyCardCount(cardCount);
 ```
 
 ### SuggestionCardComponent
+
 Represents a single flashcard suggestion.
 
 **Key Methods:**
+
 - `check()` / `uncheck()` - Toggle checkbox
 - `isChecked()` - Get checked state
 - `getFrontText()` / `getBackText()` - Get card content
@@ -147,18 +165,21 @@ Represents a single flashcard suggestion.
 - `verifyContent(front, back)` - Assert card content
 
 **Example:**
+
 ```typescript
 const firstCard = generationPage.suggestions.getFirstCard();
 await firstCard.check();
 await firstCard.verifyChecked();
-await firstCard.editFlashcard('New Question', 'New Answer');
+await firstCard.editFlashcard("New Question", "New Answer");
 await firstCard.verifyEditedBadge();
 ```
 
 ### BulkActionsComponent
+
 Handles bulk operations on flashcards.
 
 **Key Methods:**
+
 - `clickSaveAll()` - Save all flashcards
 - `clickSaveSelected()` - Save selected flashcards
 - `getSelectedCount()` - Get number of selected cards
@@ -166,6 +187,7 @@ Handles bulk operations on flashcards.
 - `isSaveSelectedDisabled()` - Check if save selected is disabled
 
 **Example:**
+
 ```typescript
 await generationPage.bulkActions.verifySelectionCount(3);
 await generationPage.bulkActions.clickSaveSelected();
@@ -177,11 +199,13 @@ await generationPage.bulkActions.verifyAcceptingState();
 Each page object includes helper methods for common workflows:
 
 **GenerationPage:**
+
 - `completeGenerationFlow(text, model?)` - Complete form submission and generation
 - `completeSaveSelectedFlow(indices)` - Check and save specific cards
 - `completeSaveAllFlow()` - Save all cards
 
 **Example:**
+
 ```typescript
 // Complete generation in one step
 await generationPage.completeGenerationFlow(validText);
@@ -193,8 +217,9 @@ await generationPage.completeSaveSelectedFlow([0, 1, 2]);
 ## Test Organization
 
 ### Test Structure
+
 ```typescript
-test.describe('Feature Area', () => {
+test.describe("Feature Area", () => {
   let generationPage: GenerationPage;
 
   test.beforeEach(async ({ page }) => {
@@ -202,59 +227,64 @@ test.describe('Feature Area', () => {
     await generationPage.navigate();
   });
 
-  test('should do something', async () => {
+  test("should do something", async () => {
     // Test implementation
   });
 });
 ```
 
 ### Assertions
+
 Use built-in `verify*` methods when available:
+
 ```typescript
 // Preferred - built-in verification
 await generationPage.form.verifyCharCount(1500);
 
 // Also valid - direct assertion
-await expect(generationPage.form.getCharCounterText()).resolves.toContain('1500');
+await expect(generationPage.form.getCharCounterText()).resolves.toContain("1500");
 ```
 
 ## Data Test IDs
 
 All components use `data-testid` attributes for reliable element selection:
 
-| Component | Test ID | Description |
-|-----------|---------|-------------|
-| GenerationForm | `model-select` | Model dropdown |
-| GenerationForm | `source-text-input` | Text input |
-| GenerationForm | `generate-button` | Submit button |
-| LoadingState | `loading-state` | Loading container |
-| SuggestionCard | `suggestion-card` | Card container |
-| SuggestionCard | `flashcard-checkbox` | Selection checkbox |
-| BulkActions | `save-all-button` | Save all button |
-| BulkActions | `save-selected-button` | Save selected button |
+| Component      | Test ID                | Description          |
+| -------------- | ---------------------- | -------------------- |
+| GenerationForm | `model-select`         | Model dropdown       |
+| GenerationForm | `source-text-input`    | Text input           |
+| GenerationForm | `generate-button`      | Submit button        |
+| LoadingState   | `loading-state`        | Loading container    |
+| SuggestionCard | `suggestion-card`      | Card container       |
+| SuggestionCard | `flashcard-checkbox`   | Selection checkbox   |
+| BulkActions    | `save-all-button`      | Save all button      |
+| BulkActions    | `save-selected-button` | Save selected button |
 
 See component files for complete list of test IDs.
 
 ## Best Practices
 
 1. **Use POM methods instead of direct locators**
+
    ```typescript
    // Good
    await generationPage.form.clickGenerate();
 
    // Avoid
-   await page.getByTestId('generate-button').click();
+   await page.getByTestId("generate-button").click();
    ```
 
 2. **Chain component interactions**
+
    ```typescript
    const card = generationPage.suggestions.getCard(0);
    await card.check();
-   await card.editFlashcard('Front', 'Back');
+   await card.editFlashcard("Front", "Back");
    await card.verifyEditedBadge();
    ```
 
 3. **Use helper methods for common flows**
+
    ```typescript
    // Good - single method call
    await generationPage.completeGenerationFlow(text);
@@ -266,17 +296,19 @@ See component files for complete list of test IDs.
    ```
 
 4. **Leverage built-in verification methods**
+
    ```typescript
    // Good - clear intent
-   await generationPage.verifySuccessMessage('zapisane pomyślnie');
+   await generationPage.verifySuccessMessage("zapisane pomyślnie");
 
    // Less clear
-   await expect(page.getByTestId('success-message')).toContainText('zapisane');
+   await expect(page.getByTestId("success-message")).toContainText("zapisane");
    ```
 
 5. **Keep tests readable**
+
    ```typescript
-   test('should save selected flashcards', async () => {
+   test("should save selected flashcards", async () => {
      // Arrange
      await generationPage.completeGenerationFlow(validText);
 
@@ -285,7 +317,7 @@ See component files for complete list of test IDs.
      await generationPage.bulkActions.clickSaveSelected();
 
      // Assert
-     await generationPage.verifySuccessMessage('3 fiszki zostały zapisane');
+     await generationPage.verifySuccessMessage("3 fiszki zostały zapisane");
    });
    ```
 
@@ -311,18 +343,20 @@ npx playwright codegen http://localhost:4321/generate
 ## Debugging
 
 1. **Use trace viewer for failed tests**
+
    ```bash
    npx playwright show-trace trace.zip
    ```
 
 2. **Use debug mode**
+
    ```typescript
    await page.pause(); // Pauses execution
    ```
 
 3. **Take screenshots**
    ```typescript
-   await generationPage.takeScreenshot('debug-state');
+   await generationPage.takeScreenshot("debug-state");
    ```
 
 ## Adding New Pages/Components
@@ -335,11 +369,12 @@ npx playwright codegen http://localhost:4321/generate
 6. Document in this README
 
 Example:
+
 ```typescript
-import { BasePage } from './BasePage';
+import { BasePage } from "./BasePage";
 
 export class NewPage extends BasePage {
-  private readonly element = this.page.getByTestId('element');
+  private readonly element = this.page.getByTestId("element");
 
   async interact() {
     await this.element.click();

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import type { FlashcardDTO } from "../../types";
 
 interface FlashcardListProps {
@@ -74,7 +74,7 @@ export default function FlashcardList({ userJson }: FlashcardListProps) {
   const [error, setError] = useState<string | null>(null);
   const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
 
-  const user: User | null = userJson ? JSON.parse(userJson) : null;
+  const user: User | null = useMemo(() => (userJson ? JSON.parse(userJson) : null), [userJson]);
 
   useEffect(() => {
     const fetchFlashcards = async () => {
@@ -124,7 +124,7 @@ export default function FlashcardList({ userJson }: FlashcardListProps) {
     };
 
     fetchFlashcards();
-  }, [userJson]);
+  }, [userJson, user]);
 
   const toggleFlip = (id: number) => {
     setFlippedCards((prev) => {
@@ -136,6 +136,13 @@ export default function FlashcardList({ userJson }: FlashcardListProps) {
       }
       return newSet;
     });
+  };
+
+  const handleKeyDown = (id: number, event: React.KeyboardEvent) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      toggleFlip(id);
+    }
   };
 
   if (loading) {
@@ -206,7 +213,11 @@ export default function FlashcardList({ userJson }: FlashcardListProps) {
             <div
               key={flashcard.id}
               className="relative h-64 cursor-pointer perspective-1000"
+              role="button"
+              tabIndex={0}
               onClick={() => toggleFlip(flashcard.id)}
+              onKeyDown={(e) => handleKeyDown(flashcard.id, e)}
+              aria-label={`Flip flashcard: ${flashcard.front_text}`}
             >
               <div
                 className={`relative w-full h-full transition-transform duration-500 preserve-3d ${

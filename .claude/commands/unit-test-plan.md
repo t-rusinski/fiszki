@@ -5,9 +5,11 @@ This document outlines the critical components that MUST be covered with unit te
 ## Testing Guidelines
 
 When writing unit tests for these components, strictly follow the testing practices defined in:
+
 - `@.claude/rules/vitest-unit-testing.md`
 
 Key principles to apply:
+
 - Use `vi.fn()`, `vi.spyOn()`, and `vi.mock()` for test doubles
 - Follow Arrange-Act-Assert pattern
 - Group tests with descriptive `describe` blocks
@@ -19,6 +21,7 @@ Key principles to apply:
 ## 1. Validation Schemas (HIGH PRIORITY)
 
 **Files to test:**
+
 - `src/lib/validation/flashcard.schemas.ts`
 - `src/lib/validation/generation.schemas.ts`
 
@@ -27,6 +30,7 @@ Key principles to apply:
 ### Test Cases for `flashcard.schemas.ts`
 
 #### `CreateFlashcardSchema`
+
 - ✅ Validates front text length (min 1, max 200 characters)
 - ✅ Validates back text length (min 1, max 500 characters)
 - ✅ Trims whitespace from front and back
@@ -39,12 +43,14 @@ Key principles to apply:
 - ✅ Allows null generation_id when source is "manual"
 
 #### `CreateMultipleFlashcardsSchema`
+
 - ✅ Requires at least 1 flashcard in array
 - ✅ Rejects empty array
 - ✅ Rejects more than 100 flashcards at once
 - ✅ Validates each flashcard in array using CreateFlashcardSchema
 
 #### `UpdateFlashcardSchema`
+
 - ✅ Validates front max length (200 characters)
 - ✅ Validates back max length (500 characters)
 - ✅ Trims whitespace
@@ -52,6 +58,7 @@ Key principles to apply:
 - ✅ Rejects update with neither front nor back
 
 #### `GetFlashcardsSchema`
+
 - ✅ Transforms string "page" to number with default 1
 - ✅ Transforms string "limit" to number with default 20
 - ✅ Validates page is positive integer
@@ -65,6 +72,7 @@ Key principles to apply:
 - ✅ Filters source by FlashcardSource enum
 
 #### `FlashcardIdSchema`
+
 - ✅ Transforms string ID to number
 - ✅ Validates ID is positive integer
 - ✅ Rejects negative or zero IDs
@@ -73,6 +81,7 @@ Key principles to apply:
 ### Test Cases for `generation.schemas.ts`
 
 #### `GenerateFlashcardsSchema`
+
 - ✅ Validates source_text min length (1000 characters)
 - ✅ Validates source_text max length (10000 characters)
 - ✅ Trims whitespace from source_text
@@ -85,18 +94,21 @@ Key principles to apply:
 - ✅ Rejects invalid model names
 
 #### `AcceptFlashcardSchema`
+
 - ✅ Validates front text required and max 200 chars
 - ✅ Validates back text required and max 500 chars
 - ✅ Trims whitespace
 - ✅ Requires edited boolean field
 
 #### `AcceptGeneratedFlashcardsSchema`
+
 - ✅ Requires at least 1 flashcard
 - ✅ Rejects empty array
 - ✅ Rejects more than 100 flashcards
 - ✅ Validates each flashcard using AcceptFlashcardSchema
 
 #### `GetGenerationsSchema`
+
 - ✅ Coerces page to number with default 1
 - ✅ Coerces limit to number with default 20
 - ✅ Validates min/max values for page and limit
@@ -108,6 +120,7 @@ Key principles to apply:
 ## 2. Error Handler (HIGH PRIORITY)
 
 **File to test:**
+
 - `src/lib/error-handler.ts`
 
 **Why:** Central point for handling all API errors. Incorrect error conversion can lead to information leaks or wrong HTTP status codes.
@@ -115,6 +128,7 @@ Key principles to apply:
 ### Test Cases for `handleApiError()`
 
 #### ZodError handling
+
 - ✅ Returns 400 status code
 - ✅ Returns ErrorDTO structure with code "VALIDATION_ERROR"
 - ✅ Maps Zod error details to ErrorDTO.error.details object
@@ -122,39 +136,47 @@ Key principles to apply:
 - ✅ Sets Content-Type to application/json
 
 #### NotFoundError handling
+
 - ✅ Returns 404 status code
 - ✅ Returns ErrorDTO with error.code = "NOT_FOUND"
 - ✅ Preserves original error message
 
 #### ValidationError handling
+
 - ✅ Returns 400 status code
 - ✅ Returns ErrorDTO with error.code = "VALIDATION_ERROR"
 - ✅ Includes error.details when provided
 
 #### UnauthorizedError handling
+
 - ✅ Returns 401 status code
 - ✅ Returns ErrorDTO with error.code = "UNAUTHORIZED"
 - ✅ Preserves error message
 
 #### RateLimitError handling
+
 - ✅ Returns 429 status code
 - ✅ Returns ErrorDTO with error.code = "RATE_LIMIT_EXCEEDED"
 
 #### ServiceUnavailableError handling
+
 - ✅ Returns 503 status code
 - ✅ Returns ErrorDTO with error.code = "AI_SERVICE_ERROR"
 
 #### DatabaseError handling
+
 - ✅ Returns 500 status code
 - ✅ Returns ErrorDTO with error.code = "DATABASE_ERROR"
 
 #### Unknown error handling
+
 - ✅ Returns 500 status code
 - ✅ Returns ErrorDTO with error.code = "INTERNAL_SERVER_ERROR"
 - ✅ Returns generic message "An unexpected error occurred"
 - ✅ Does not leak error details
 
 #### General
+
 - ✅ Logs all errors to console
 - ✅ Always returns Response object
 - ✅ Always sets application/json Content-Type
@@ -164,6 +186,7 @@ Key principles to apply:
 ## 3. Model Checker (HIGH PRIORITY)
 
 **File to test:**
+
 - `src/lib/model-checker.ts`
 
 **Why:** Controls access to AI models and potentially usage costs. Errors can lead to using unavailable models or incorrect categorization.

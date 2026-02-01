@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* eslint-env node */
-/* eslint-disable no-console */
+/* eslint-disable no-console, no-undef */
 
 /**
  * Script do sprawdzania dostępności modeli OpenRouter
@@ -16,9 +16,7 @@ config();
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-const MODELS_TO_CHECK = [
-  "arcee-ai/trinity-large-preview:free",
-];
+const MODELS_TO_CHECK = ["arcee-ai/trinity-large-preview:free"];
 
 async function fetchAvailableModels() {
   if (!OPENROUTER_API_KEY) {

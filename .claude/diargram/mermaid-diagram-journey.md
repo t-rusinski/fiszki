@@ -3,6 +3,7 @@ description:
 globs:
 alwaysApply: false
 ---
+
 # Mermaid Diagram - User Journey
 
 Jesteś specjalistą UX, którego zadaniem jest utworzenie diagramu Mermaid w celu wizualizacji podróży użytkownika dla modułu logowania i rejestracji. Diagram powinien zostać utworzony w następującym pliku: DESTINATION
@@ -35,7 +36,6 @@ Kiedy będziesz gotowy do utworzenia diagramu, postępuj zgodnie z poniższymi w
    ```
 
 2. Uwzględnij następujące elementy w swoim diagramie:
-
    - Ścieżki użytkownika oparte na istniejących wymaganiach
    - Korzystanie z aplikacji jako niezalogowany użytkownik
    - Dostęp do głównej funkcjonalności aplikacji
@@ -48,7 +48,6 @@ Kiedy będziesz gotowy do utworzenia diagramu, postępuj zgodnie z poniższymi w
    - Skupienie się na ścieżkach biznesowych, a nie aspektach technicznych
 
 3. Przestrzegaj tych zasad składni Mermaid:
-
    - Stany początkowe i końcowe muszą być poprawnie zdefiniowane:
      ```
      [*] --> StronaGlowna

@@ -47,11 +47,7 @@
       "Write(./**/*.mjs)",
       "Write(./**/*.cjs)"
     ],
-    "ask": [
-      "WebFetch",
-      "WebSearch",
-      "Task"
-    ]
+    "ask": ["WebFetch", "WebSearch", "Task"]
   },
   "hooks": {
     "PostToolUse": [

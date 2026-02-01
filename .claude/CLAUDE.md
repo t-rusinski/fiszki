@@ -74,7 +74,6 @@ AI-powered flashcard creation and management application with spaced repetition 
 - Implement aria-current for indicating the current item in a set, navigation, or process
 - Avoid redundant ARIA that duplicates the semantics of native HTML elements
 
-
 # Shadcn UI Components
 
 Ten projekt wykorzystuje @shadcn/ui dla komponentów interfejsu użytkownika. Są to pięknie zaprojektowane, dostępne komponenty, które można dostosować do swojej aplikacji.
@@ -88,9 +87,9 @@ Komponenty są dostępne w folderze `src/components/ui`, zgodnie z aliasami z pl
 Zaimportuj komponent zgodnie ze skonfigurowanym aliasem `@/`
 
 ```tsx
-import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 ```
 
 Przykładowe wykorzystanie komponnetów:
@@ -117,7 +116,6 @@ Przykładowe wykorzystanie komponnetów:
 Wiele innych komponentów jest dostępnych, ale nie są one obecnie zainstalowane. Pełną listę można znaleźć na stronie https://ui.shadcn.com/r
 
 Aby zainstalować nowy komponent, wykorzystaj shadcn CLI
-
 
 ```bash
 npx shadcn@latest add [component-name]
@@ -169,7 +167,6 @@ Niektóre popularne komponenty to:
 ## Component Styling
 
 Ten projekt wykorzystuje wariant stylu „new-york” z kolorem bazowym "neutral" i zmiennymi CSS do tworzenia motywów, zgodnie z konfiguracją w sekcji `components.json`.
-
 
 ## DEVOPS
 

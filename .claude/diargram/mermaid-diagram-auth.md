@@ -3,6 +3,7 @@ description:
 globs:
 alwaysApply: false
 ---
+
 # Mermaid Diagram - Auth Architecture
 
 Jesteś specjalistą ds. bezpieczeństwa, którego zadaniem jest utworzenie diagramu Mermaid w celu wizualizacji przepływu autentykacji dla modułu logowania i rejestracji. Diagram powinien zostać utworzony w następującym pliku: DESTINATION
@@ -35,7 +36,6 @@ Kiedy będziesz gotowy do utworzenia diagramu, postępuj zgodnie z poniższymi w
    ```
 
 2. Uwzględnij następujące elementy w swoim diagramie:
-
    - Pełny cykl życia procesu autentykacji w nowoczesnej aplikacji używającej React, Astro i Supabase Auth
    - Komunikacja między aktorami: 1) Przeglądarka 2) Middleware 3) Astro API 4) Supabase Auth
    - Wyraźne punkty, w których następuje przekierowanie użytkownika lub weryfikacja tokenu
@@ -44,7 +44,6 @@ Kiedy będziesz gotowy do utworzenia diagramu, postępuj zgodnie z poniższymi w
    - Proces odświeżania tokenu i ochrona przed nieautoryzowanym dostępem
 
 3. Przestrzegaj tych zasad składni Mermaid:
-
    - Używaj atrybutu `autonumber` dla przejrzystości sekwencji kroków
    - Utrzymuj spójne odstępy między elementami dla czytelności diagramu
    - Zawsze używaj `participant` do deklarowania aktorów przed rozpoczęciem sekwencji
