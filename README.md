@@ -1,4 +1,4 @@
-# trusinski-fiszki.pl
+# trusinski-fiszki
 
 AI-powered flashcard creation and management application with spaced repetition learning system.
 
