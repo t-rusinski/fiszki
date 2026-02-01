@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
+import { describe, expect, it } from "vitest";
 import { ZodError, z } from "zod";
 import { handleApiError } from "./error-handler";
 import {
@@ -12,17 +12,6 @@ import {
 import type { ErrorDTO } from "../types";
 
 describe("handleApiError", () => {
-  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    consoleErrorSpy.mockRestore();
-  });
-
   describe("ZodError handling", () => {
     it("returns 400 status code", () => {
       const schema = z.object({ name: z.string() });
@@ -405,14 +394,6 @@ describe("handleApiError", () => {
   });
 
   describe("General behavior", () => {
-    it("logs all errors to console", () => {
-      const error = new NotFoundError("Test error");
-
-      handleApiError(error);
-
-      expect(consoleErrorSpy).toHaveBeenCalledWith("API Error:", error);
-    });
-
     it("always returns Response object", () => {
       const errors = [
         new ZodError([]),

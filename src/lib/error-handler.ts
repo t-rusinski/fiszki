@@ -17,8 +17,9 @@ import type { ErrorDTO } from "../types";
  * @returns Response with appropriate status code and error body
  */
 export function handleApiError(error: unknown): Response {
-  // Log errors in non-production environments
-  if (import.meta.env.MODE !== "production") {
+  // Log errors in non-production environments (excluding tests)
+  if (import.meta.env.MODE !== "production" && !import.meta.env.VITEST) {
+    // eslint-disable-next-line no-console
     console.error("API Error:", error);
   }
 
